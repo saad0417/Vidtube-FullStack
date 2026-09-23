@@ -1,0 +1,380 @@
+/* ----------------------------------------------------------------------
+   Epic Pro — used for display headings (auth pages, page titles, the
+   wordmark). Demo weights: free for personal use only. A commercial licence
+   must be bought before any commercial launch.
+   See src/assets/fonts/EpicPro-LICENSE.txt.
+
+   CHARACTER SET: the demo weights carry letters and nothing else — A-Z and
+   a-z, no digits or punctuation. The earlier cut of the same typeface does
+   include 0-9 . , ? ! & so it is declared under the same family with a
+   unicode-range limited to those, keeping numbers in Epic Pro instead of
+   dropping to the fallback face. Body copy stays on Inter.
+   ---------------------------------------------------------------------- */
+@font-face {
+  font-family: 'Epic Pro';
+  src: url('./assets/fonts/EpicPro-Thin.ttf') format('truetype');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0020, U+0041-005A, U+0061-007A;
+}
+@font-face {
+  font-family: 'Epic Pro';
+  src: url('./assets/fonts/EpicPro-ExtraLight.ttf') format('truetype');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0020, U+0041-005A, U+0061-007A;
+}
+@font-face {
+  font-family: 'Epic Pro';
+  src: url('./assets/fonts/EpicPro-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0020, U+0041-005A, U+0061-007A;
+}
+@font-face {
+  font-family: 'Epic Pro';
+  src: url('./assets/fonts/EpicPro-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0020, U+0041-005A, U+0061-007A;
+}
+@font-face {
+  font-family: 'Epic Pro';
+  src: url('./assets/fonts/EpicPro-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0020, U+0041-005A, U+0061-007A;
+}
+@font-face {
+  font-family: 'Epic Pro';
+  src: url('./assets/fonts/EpicPro-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0020, U+0041-005A, U+0061-007A;
+}
+@font-face {
+  font-family: 'Epic Pro';
+  src: url('./assets/fonts/EpicPro-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0020, U+0041-005A, U+0061-007A;
+}
+@font-face {
+  font-family: 'Epic Pro';
+  src: url('./assets/fonts/EpicPro-ExtraBold.ttf') format('truetype');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0020, U+0041-005A, U+0061-007A;
+}
+
+/* Digits and punctuation, from the earlier cut of the same typeface. Declared
+   once per fixed weight rather than as one `font-weight: 100 900` face — with a
+   weight RANGE on a unicode-range face the browser never selects it and the
+   characters fall through to the next family. All eight rules point at the same
+   file, so it is still a single download. */
+@font-face {
+  font-family: 'Epic Pro';
+  src: url('./assets/fonts/EpicPro-Punctuation-ExtraBold.ttf') format('truetype');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0021, U+0026, U+002C, U+002E, U+003F, U+0030-0039;
+}
+@font-face {
+  font-family: 'Epic Pro';
+  src: url('./assets/fonts/EpicPro-Punctuation-ExtraBold.ttf') format('truetype');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0021, U+0026, U+002C, U+002E, U+003F, U+0030-0039;
+}
+@font-face {
+  font-family: 'Epic Pro';
+  src: url('./assets/fonts/EpicPro-Punctuation-ExtraBold.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0021, U+0026, U+002C, U+002E, U+003F, U+0030-0039;
+}
+@font-face {
+  font-family: 'Epic Pro';
+  src: url('./assets/fonts/EpicPro-Punctuation-ExtraBold.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0021, U+0026, U+002C, U+002E, U+003F, U+0030-0039;
+}
+@font-face {
+  font-family: 'Epic Pro';
+  src: url('./assets/fonts/EpicPro-Punctuation-ExtraBold.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0021, U+0026, U+002C, U+002E, U+003F, U+0030-0039;
+}
+@font-face {
+  font-family: 'Epic Pro';
+  src: url('./assets/fonts/EpicPro-Punctuation-ExtraBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0021, U+0026, U+002C, U+002E, U+003F, U+0030-0039;
+}
+@font-face {
+  font-family: 'Epic Pro';
+  src: url('./assets/fonts/EpicPro-Punctuation-ExtraBold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0021, U+0026, U+002C, U+002E, U+003F, U+0030-0039;
+}
+@font-face {
+  font-family: 'Epic Pro';
+  src: url('./assets/fonts/EpicPro-Punctuation-ExtraBold.ttf') format('truetype');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0021, U+0026, U+002C, U+002E, U+003F, U+0030-0039;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+Theme tokens. `data-theme` is stamped on <html> before first paint by the
+inline script in index.html, so there is no flash of the wrong theme.
+
+Values are space-separated RGB channels so Tailwind can apply opacity
+modifiers to them (see tailwind.config.js).
+*/
+@layer base {
+  :root,
+  [data-theme='dark'] {
+    --c-white: 255 255 255;
+    --c-black: 0 0 0;
+
+    --c-gray-50: 255 255 255;
+    --c-gray-100: 243 244 246;
+    --c-gray-200: 229 231 235;
+    --c-gray-300: 209 213 219;
+    --c-gray-400: 156 163 175;
+    --c-gray-500: 107 114 128;
+    --c-gray-600: 75 85 99;
+    --c-gray-700: 55 65 81;
+    --c-gray-800: 31 41 55;
+    --c-gray-900: 17 24 39;
+
+    --c-brand: 255 0 51;
+    --c-brand-hover: 204 0 41;
+    --c-brand-light: 255 77 109;
+
+    --c-base: 15 15 15;
+    --c-surface: 24 24 24;
+    --c-card: 33 33 33;
+    --c-hover: 39 39 39;
+    --c-border: 48 48 48;
+    --c-input: 18 18 18;
+    --c-muted: 170 170 170;
+
+    /* Always white: text/icons drawn on brand or status fills, which are
+       coloured in both themes and so need a fixed foreground. */
+    --c-on-accent: 255 255 255;
+
+    --c-scroll-track: 15 15 15;
+    --c-scroll-thumb: 51 51 51;
+    --c-scroll-thumb-hover: 85 85 85;
+    --c-skeleton-from: 30 30 30;
+    --c-skeleton-to: 42 42 42;
+
+    color-scheme: dark;
+  }
+
+  /* The light theme inverts the foreground extremes rather than introducing a
+     parallel set of classes: `text-white` stays "strongest text". */
+  [data-theme='light'] {
+    --c-white: 12 14 18;
+    --c-black: 255 255 255;
+
+    --c-gray-50: 12 14 18;
+    --c-gray-100: 24 27 33;
+    --c-gray-200: 42 46 54;
+    --c-gray-300: 58 63 72;
+    --c-gray-400: 84 90 101;
+    --c-gray-500: 110 117 128;
+    --c-gray-600: 142 149 160;
+    --c-gray-700: 176 183 193;
+    --c-gray-800: 205 211 219;
+    --c-gray-900: 231 235 240;
+
+    --c-brand: 206 0 41;
+    --c-brand-hover: 168 0 33;
+    --c-brand-light: 168 0 33;
+
+    /* Surfaces are stepped far enough apart to read as distinct cards on
+       white, and the border is dark enough to outline buttons and inputs
+       without a shadow. */
+    --c-base: 255 255 255;
+    --c-surface: 245 247 250;
+    --c-card: 236 239 244;
+    --c-hover: 222 227 235;
+    --c-border: 196 203 213;
+    --c-input: 255 255 255;
+    --c-muted: 84 90 101;
+
+    /* Always white: text/icons drawn on brand or status fills, which are
+       coloured in both themes and so need a fixed foreground. */
+    --c-on-accent: 255 255 255;
+
+    --c-scroll-track: 240 240 240;
+    --c-scroll-thumb: 200 200 200;
+    --c-scroll-thumb-hover: 170 170 170;
+    --c-skeleton-from: 232 232 232;
+    --c-skeleton-to: 243 243 243;
+
+    color-scheme: light;
+  }
+
+  body {
+    @apply bg-dark-base text-gray-100 antialiased font-sans;
+    overflow-x: hidden;
+  }
+}
+
+/*
+Theme switching. Components carry their own `transition-colors` durations, so
+flipping the tokens made the navbar, sidebar and cards ease to the new colour
+at visibly different rates. Suppressing transitions for the duration of the
+swap makes the whole page change in a single frame.
+*/
+[data-theme-switching] *,
+[data-theme-switching] *::before,
+[data-theme-switching] *::after {
+  transition: none !important;
+  animation-duration: 0s !important;
+}
+
+html {
+  scroll-behavior: smooth;
+  /* Stops the page shifting sideways when a modal locks body scroll. */
+  scrollbar-gutter: stable;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Custom modern scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgb(var(--c-scroll-track));
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgb(var(--c-scroll-thumb));
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(var(--c-scroll-thumb-hover));
+}
+
+/* Video aspect ratio container */
+.aspect-video-container {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%; /* 16:9 */
+}
+
+.aspect-video-container > * {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Keyboard focus. Mouse clicks get nothing (`:focus-visible`), so a clicked
+   nav link no longer keeps a hard outline after navigating. */
+:focus-visible {
+  outline: 2px solid rgb(var(--c-brand));
+  outline-offset: 2px;
+  border-radius: 0.5rem;
+}
+
+/* Inputs and textareas carry their own focus border, so the extra ring would
+   double up. */
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: none;
+}
+
+/* Chips drawn over artwork (durations, playlist counts). Fixed colours: the
+   backdrop is an image, not a themed surface. */
+.overlay-chip {
+  background-color: rgb(0 0 0 / 0.78);
+  color: #fff;
+  backdrop-filter: blur(2px);
+}
+
+/* Custom button styles */
+.btn-primary {
+  @apply inline-flex items-center justify-center gap-2 px-4 py-2 rounded-full font-medium text-sm bg-brand hover:bg-brand-hover text-on-accent transition-all duration-200 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-brand/20;
+}
+
+.btn-secondary {
+  @apply inline-flex items-center justify-center gap-2 px-4 py-2 rounded-full font-medium text-sm bg-dark-card hover:bg-dark-hover text-white border border-dark-border transition-all duration-200 active:scale-95 disabled:opacity-50 shadow-sm;
+}
+
+.btn-ghost {
+  @apply inline-flex items-center justify-center p-2 rounded-full text-gray-300 hover:text-white hover:bg-dark-hover transition-colors;
+}
+
+/* Custom input style */
+.input-field {
+  @apply w-full bg-dark-input border border-dark-border rounded-lg px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand/30 transition-colors;
+}
+
+/* Shimmer animation for skeletons */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgb(var(--c-skeleton-from)) 25%,
+    rgb(var(--c-skeleton-to)) 50%,
+    rgb(var(--c-skeleton-from)) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
