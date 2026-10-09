@@ -90,7 +90,7 @@ export const LoginPage = () => {
             autoComplete="username"
             value={identifier}
             onChange={(e) => setIdentifier(e.target.value)}
-            placeholder="saad417 or you@example.com"
+            placeholder="user123 or you@example.com"
             className="input-field"
             disabled={submitting}
           />
