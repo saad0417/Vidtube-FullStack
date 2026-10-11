@@ -19,6 +19,7 @@ It serves the React app in [`../client`](../client). See the [root README](../RE
 | Authentication | `jsonwebtoken`, `bcrypt`, `cookie-parser` |
 | File uploads | `multer` (to local disk), then `cloudinary` |
 | Cross-origin | `cors` |
+| Rate limiting | `express-rate-limit` |
 | Config | `dotenv` |
 | Dev tooling | `nodemon`, `prettier` |
 
@@ -71,6 +72,9 @@ curl http://localhost:8000/api/v1/healthCheck
 | `CLOUDINARY_CLOUD_NAME` | Cloudinary cloud name | |
 | `CLOUDINARY_API_KEY` | Cloudinary API key | |
 | `CLOUDINARY_API_SECRET` | Cloudinary API secret | |
+| `TRUST_PROXY` | *Optional.* Number of proxies in front of the API, so rate limiting sees the real client IP. Defaults to `3` on Render (detected through Render's `RENDER` variable) and `0` everywhere else. | `3` |
+
+`CORS_ORIGIN` can hold several origins separated by commas. `https://vidtubeoffical.vercel.app` and the usual localhost dev ports are always allowed. Browsers on any other origin are blocked.
 
 `.env` is gitignored. Use `.env.example` as the template.
 
@@ -258,6 +262,29 @@ Protected routes accept the access token from the `accessToken` cookie or from a
 ### CAPTCHA
 `utils/captcha.js` generates a 5-character challenge drawn as distorted SVG paths. Answers are stored in an in-memory `Map` and never sent to the client. Each challenge can be used once, expires after 5 minutes, and at most 5,000 can be pending at a time. Because the store is in memory, restarting the server (or Render putting it to sleep) invalidates any outstanding challenges, and the store is not shared between multiple instances.
 
+### Rate limiting
+Built with [`express-rate-limit`](https://github.com/express-rate-limit/express-rate-limit) in `src/middlewares/rateLimit.middleware.js`. Each endpoint has a limit that fits how it's used, rather than one number for the whole API:
+
+| Limiter | Applies to | Limit | Keyed by |
+| --- | --- | --- | --- |
+| `apiLimiter` | Every request (except `/healthCheck`) | 1000 / 15 min | IP |
+| `loginLimiter` | `POST /users/login` | 10 **failed** attempts / 15 min | IP |
+| `registerLimiter` | `POST /users/register` | 5 **successful** sign-ups / hour | IP |
+| `captchaLimiter` | `GET /captcha` | 30 / 10 min | IP |
+| `refreshTokenLimiter` | `POST /users/refresh-token` | 30 / 15 min | IP |
+| `passwordChangeLimiter` | `POST /users/change-password` | 5 **wrong** passwords / 15 min | User |
+| `videoUploadLimiter` | `POST /video` | 10 / hour | User |
+| `mediaUpdateLimiter` | Avatar, cover image, video edits | 30 / hour | User |
+| `contentWriteLimiter` | Create, edit and delete comments, posts, playlists, videos; account details; become creator | 60 / 10 min (shared) | User |
+| `interactionLimiter` | Likes, subscribe, playlist add/remove, publish toggle | 60 / min | User |
+
+- **Signed-in limits are per user, not per IP,** so people who share an IP address (a campus, an office, a mobile network) don't use up each other's limits. These limiters run after `verifyJWT`.
+- **Login and password-change limits count only failures,** so a legitimate user is never locked out by their own successful requests. Registration counts only successes, so a mistyped CAPTCHA doesn't use up the limit.
+- **Upload limiters run before Multer,** so a blocked upload is never written to disk.
+- **A blocked request gets the standard error format with status `429`.** The response includes `RateLimit`, `RateLimit-Policy` and `Retry-After` headers (IETF draft 8), and the frontend shows the message as a toast.
+- **Getting the real client IP:** on Render, a request passes through Cloudflare, Render's load balancer and an internal proxy before it reaches the app. `app.js` sets `trust proxy` to `3` so `req.ip` is the visitor's address, not a proxy's. Entries further left in `X-Forwarded-For` can be faked by the client and are ignored.
+- **Counters are kept in memory,** which is right for a single instance. They reset when the server restarts. To run several instances, switch to a shared store such as Redis.
+
 ### Request limits
 JSON and URL-encoded request bodies are limited to **16 KB**. File uploads go through Multer and are not affected by this limit.
 
@@ -265,4 +292,4 @@ JSON and URL-encoded request bodies are limited to **16 KB**. File uploads go th
 
 ## Acknowledgements
 
-This backend was built while following the **[Chai aur Code](https://www.youtube.com/@chaiaurcode)** backend series, then extended with creator mode, the CAPTCHA, ownership checks and the dashboard.
+This backend was built while following the **[Chai aur Code](https://www.youtube.com/@chaiaurcode)** backend series, then extended with creator mode, the CAPTCHA, ownership checks, rate limiting and the dashboard.

@@ -9,6 +9,7 @@ import {
 } from "../controllers/video.controller.js"
 import {verifyJWT, optionalVerifyJWT, requireCreator} from "../middlewares/auth.middleware.js"
 import {upload} from "../middlewares/multer.middleware.js"
+import {videoUploadLimiter, mediaUpdateLimiter, contentWriteLimiter, interactionLimiter} from "../middlewares/rateLimit.middleware.js"
 
 const router = Router();
 
@@ -18,6 +19,7 @@ router.route("/")
     .post(
         verifyJWT,
         requireCreator,
+        videoUploadLimiter, // before multer, so a blocked upload never writes to disk
         upload.fields([
             {
                 name: "videoFile",
@@ -33,13 +35,14 @@ router.route("/")
 
 router.route("/:videoId")
     .get(optionalVerifyJWT, getVideoById)
-    .delete(verifyJWT, deleteVideo)
+    .delete(verifyJWT, contentWriteLimiter, deleteVideo)
     .patch(
         verifyJWT,
+        mediaUpdateLimiter,
         upload.single("thumbnail"),
         updateVideo
     );
 
-router.route("/toggle/publish/:videoId").patch(verifyJWT, togglePublishStatus);
+router.route("/toggle/publish/:videoId").patch(verifyJWT, interactionLimiter, togglePublishStatus);
 
 export default router

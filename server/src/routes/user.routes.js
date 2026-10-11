@@ -15,11 +15,20 @@ import {
 import { upload } from "../middlewares/multer.middleware.js"
 import { verifyJWT, optionalVerifyJWT } from "../middlewares/auth.middleware.js"
 import { verifyCaptcha } from "../middlewares/captcha.middleware.js"
+import {
+    loginLimiter,
+    registerLimiter,
+    refreshTokenLimiter,
+    passwordChangeLimiter,
+    mediaUpdateLimiter,
+    contentWriteLimiter
+} from "../middlewares/rateLimit.middleware.js"
 
 
 const router = Router()
 
 router.route("/register").post(
+    registerLimiter, // before multer, so a blocked request never writes files to disk
     upload.fields([  // upload.fields can upload multiple files while upload.single uploads single file to multer.
         {
             name: "avatar",
@@ -34,33 +43,35 @@ router.route("/register").post(
     registerUser
 )
 
-router.route("/login").post(verifyCaptcha, loginUser)
+router.route("/login").post(loginLimiter, verifyCaptcha, loginUser)
 
 // secured routes
 router.route("/logout").post(verifyJWT, logoutUser)
 
-router.route("/refresh-token").post(refreshAccessToken)
+router.route("/refresh-token").post(refreshTokenLimiter, refreshAccessToken)
 
 // here in the upload.single we are just passsing single name and no maxCount here because we are uploading only one file only.
 router.route("/update-avatar").patch(
     verifyJWT,
+    mediaUpdateLimiter,
     upload.single("avatar"),
     updateAvatar
 )
 
 router.route("/update-cover-image").patch(
     verifyJWT,
+    mediaUpdateLimiter,
     upload.single("coverImage"),
     updateCoverImage
 )
 
-router.route("/change-password").post(verifyJWT, changeCurrentPassword)
+router.route("/change-password").post(verifyJWT, passwordChangeLimiter, changeCurrentPassword)
 
 router.route("/current-user").get(verifyJWT, getCurrentUser)
 
-router.route("/become-creator").post(verifyJWT, becomeCreator)
+router.route("/become-creator").post(verifyJWT, contentWriteLimiter, becomeCreator)
 
-router.route("/update-account-details").patch(verifyJWT, changeAccountDetails)
+router.route("/update-account-details").patch(verifyJWT, contentWriteLimiter, changeAccountDetails)
 
 router.route("/ch/:username").get(optionalVerifyJWT, getUserChannelProfile)
 

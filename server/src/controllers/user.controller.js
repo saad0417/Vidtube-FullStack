@@ -288,17 +288,20 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
             throw new ApiError(401, "Refresh token is used or expired!")
         }
     
-        const {accessToken, newRefreshToken} = await generateAccessAndRefreshTokens(user._id)
-    
+        // the helper returns `refreshToken`, so rename it here. The old token is
+        // now invalid (it no longer matches the one saved in the DB), so the new
+        // one must reach the client under the same cookie name it reads from.
+        const {accessToken, refreshToken: newRefreshToken} = await generateAccessAndRefreshTokens(user._id)
+
         const options = {
             httpOnly: true,
             secure: true
         }
-    
+
         return res
         .status(200)
         .cookie("accessToken", accessToken, options)
-        .cookie("newRefreshToken", newRefreshToken, options)
+        .cookie("refreshToken", newRefreshToken, options)
         .json(
             new ApiResponse(
                 200,

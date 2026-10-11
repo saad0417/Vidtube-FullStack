@@ -139,6 +139,9 @@ function App() {
                   error: { iconTheme: { primary: '#ef4444', secondary: '#fff' } },
                 }}
               />
+
+              {/* Vercel Web Analytics: page views, including client-side route changes */}
+              <Analytics />
             </SidebarProvider>
           </AuthProvider>
         </BrowserRouter>
