@@ -105,7 +105,7 @@ export const CreateChannelPage = () => {
         ))}
       </div>
 
-      <div className="mt-8 flex flex-col items-center gap-3">
+      <div className="mt-8 flex flex-col items-center gap-1">
         <button
           onClick={handleCreate}
           disabled={submitting}
@@ -126,7 +126,7 @@ export const CreateChannelPage = () => {
 
         <Link
           to="/"
-          className="inline-flex items-center gap-1.5 text-xs text-gray-400 hover:text-white transition-colors"
+          className="inline-flex items-center gap-1.5 py-2 text-xs text-gray-400 hover:text-white transition-colors"
         >
           <span>Not now, keep browsing</span>
           <ArrowRight className="w-3.5 h-3.5" />

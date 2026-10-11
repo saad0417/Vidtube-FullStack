@@ -73,7 +73,7 @@ export const LoginPage = () => {
         {error && (
           <div
             role="alert"
-            className="px-4 py-3 rounded-lg bg-red-500/10 border border-red-500/30 text-sm text-red-300"
+            className="px-4 py-3 rounded-lg bg-red-500/10 border border-red-500/30 text-sm text-danger"
           >
             {error}
           </div>

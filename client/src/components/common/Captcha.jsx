@@ -55,7 +55,7 @@ export const Captcha = forwardRef(({ value, onChange, onIdChange, disabled = fal
           {loading ? (
             <Loader2 className="w-4 h-4 text-gray-400 animate-spin" />
           ) : failed ? (
-            <span className="text-[10px] text-red-400 px-2 text-center leading-tight">
+            <span className="text-[10px] text-danger px-2 text-center leading-tight">
               Couldn't load
             </span>
           ) : (
@@ -96,7 +96,7 @@ export const Captcha = forwardRef(({ value, onChange, onIdChange, disabled = fal
         />
       </div>
 
-      {error && <p className="text-xs text-red-400 mt-1.5">{error}</p>}
+      {error && <p className="text-xs text-danger mt-1.5">{error}</p>}
       <p className="text-[11px] text-gray-500 mt-1.5">
         Not case sensitive. Click the refresh icon for a different image.
       </p>

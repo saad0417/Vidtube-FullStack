@@ -48,13 +48,13 @@ export const CreateTweetBox = ({ onTweetCreated }) => {
 
   return (
     <div className="p-4 rounded-2xl bg-dark-card border border-dark-border/60 shadow-sm">
-      <div className="flex gap-4 items-start">
+      <div className="flex gap-3 sm:gap-4 items-start">
         <img
           src={user?.avatar}
           alt={user?.fullName}
           className="w-10 h-10 rounded-full object-cover border border-dark-border shrink-0 mt-1"
         />
-        <form onSubmit={handleSubmit} className="flex-1 flex flex-col gap-3">
+        <form onSubmit={handleSubmit} className="flex-1 min-w-0 flex flex-col gap-3">
           <textarea
             placeholder="Share an update, question, or thought with your community..."
             value={content}

@@ -228,13 +228,14 @@ export const SettingsPage = () => {
         }
       />
 
-      {/* Tabs */}
-      <div className="flex items-center gap-1 border-b border-dark-border/60 overflow-x-auto">
+      {/* Tabs — on phones four side-by-side labels don't fit, so each tab stacks its
+          icon over its label and they share the width equally */}
+      <div className="flex items-center gap-1 border-b border-dark-border/60 overflow-x-auto scrollbar-none">
         {TABS.map(({ id, label, icon: Icon }) => (
           <button
             key={id}
             onClick={() => setActiveTab(id)}
-            className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 whitespace-nowrap transition-colors ${
+            className={`flex flex-1 sm:flex-none flex-col sm:flex-row items-center gap-1 sm:gap-2 px-1 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm font-medium border-b-2 whitespace-nowrap transition-colors ${
               activeTab === id
                 ? 'border-brand text-white'
                 : 'border-transparent text-gray-400 hover:text-white'
@@ -250,7 +251,7 @@ export const SettingsPage = () => {
       {activeTab === 'profile' && (
         <form
           onSubmit={handleSaveProfile}
-          className="p-6 rounded-2xl bg-dark-surface/40 border border-dark-border/60 flex flex-col gap-5"
+          className="p-5 sm:p-6 rounded-2xl bg-dark-surface/40 border border-dark-border/60 flex flex-col gap-5"
         >
           <div>
             <h2 className="text-base font-semibold text-white">Account details</h2>
@@ -316,7 +317,7 @@ export const SettingsPage = () => {
 
       {/* Branding */}
       {activeTab === 'branding' && (
-        <div className="p-6 rounded-2xl bg-dark-surface/40 border border-dark-border/60 flex flex-col gap-6">
+        <div className="p-5 sm:p-6 rounded-2xl bg-dark-surface/40 border border-dark-border/60 flex flex-col gap-6">
           <div>
             <h2 className="text-base font-semibold text-white">Channel branding</h2>
             <p className="text-xs text-gray-400 mt-1">
@@ -346,6 +347,13 @@ export const SettingsPage = () => {
                 </div>
               )}
 
+              {(coverPreview || user?.coverImage) && !savingCover && (
+                <span className="overlay-chip absolute bottom-2 right-2 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold pointer-events-none">
+                  <Camera className="w-3.5 h-3.5" />
+                  Change
+                </span>
+              )}
+
               {savingCover && (
                 <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
                   <Loader2 className="w-6 h-6 text-brand animate-spin" />
@@ -360,7 +368,7 @@ export const SettingsPage = () => {
               onChange={handleCoverChange}
             />
             <p className="text-xs text-gray-500 mt-2">
-              Recommended 2048 × 1152 px, under 5 MB.
+              Recommended 2048 × 1152 px, under 5&nbsp;MB.
             </p>
           </div>
 
@@ -369,36 +377,43 @@ export const SettingsPage = () => {
             <p className="text-xs font-semibold text-gray-300 uppercase tracking-wider mb-3 mt-4">
               Profile picture
             </p>
-            <div className="flex items-center gap-5">
-              <button
-                type="button"
-                onClick={() => !savingAvatar && avatarInputRef.current?.click()}
-                className="relative w-24 h-24 rounded-full overflow-hidden border-2 border-dark-border bg-dark-card shrink-0 group"
-              >
-                <img
-                  src={avatarPreview || user?.avatar || DEFAULT_AVATAR}
-                  alt={user?.fullName || 'Profile'}
-                  className="w-full h-full object-cover"
-                  onError={(e) => {
-                    e.currentTarget.src = DEFAULT_AVATAR;
-                  }}
-                />
-                <span className="absolute inset-0 bg-black/55 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center gap-1 text-white transition-opacity">
-                  <Camera className="w-5 h-5" />
-                  <span className="text-[10px] font-semibold">Change</span>
-                </span>
-                {savingAvatar && (
-                  <span className="absolute inset-0 bg-black/60 flex items-center justify-center">
-                    <Loader2 className="w-5 h-5 text-brand animate-spin" />
+            <div className="flex items-center gap-4 sm:gap-5">
+              <div className="relative shrink-0">
+                <button
+                  type="button"
+                  onClick={() => !savingAvatar && avatarInputRef.current?.click()}
+                  aria-label="Change profile picture"
+                  className="relative block w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden border-2 border-dark-border bg-dark-card group"
+                >
+                  <img
+                    src={avatarPreview || user?.avatar || DEFAULT_AVATAR}
+                    alt={user?.fullName || 'Profile'}
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      e.currentTarget.src = DEFAULT_AVATAR;
+                    }}
+                  />
+                  <span className="absolute inset-0 bg-black/55 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center gap-1 text-white transition-opacity">
+                    <Camera className="w-5 h-5" />
+                    <span className="text-[10px] font-semibold">Change</span>
                   </span>
-                )}
-              </button>
+                  {savingAvatar && (
+                    <span className="absolute inset-0 bg-black/60 flex items-center justify-center">
+                      <Loader2 className="w-5 h-5 text-brand animate-spin" />
+                    </span>
+                  )}
+                </button>
+                {/* Always-visible edit badge, since the hover overlay never appears on touch */}
+                <span className="absolute bottom-0 right-0 p-1.5 rounded-full bg-brand text-on-accent shadow pointer-events-none">
+                  <Camera className="w-3.5 h-3.5" />
+                </span>
+              </div>
 
-              <div className="text-sm">
-                <p className="font-semibold text-white">{user?.fullName}</p>
-                <p className="text-gray-400 text-xs mt-0.5">@{user?.username}</p>
+              <div className="text-sm min-w-0">
+                <p className="font-semibold text-white truncate">{user?.fullName}</p>
+                <p className="text-gray-400 text-xs mt-0.5 truncate">@{user?.username}</p>
                 <p className="text-xs text-gray-500 mt-2 max-w-xs">
-                  A square image of at least 98 × 98 px works best. PNG or JPG, under 5 MB.
+                  A square image of at least 98 × 98 px works best. PNG or JPG, under 5&nbsp;MB.
                 </p>
               </div>
             </div>
@@ -415,7 +430,7 @@ export const SettingsPage = () => {
 
       {/* Appearance */}
       {activeTab === 'appearance' && (
-        <div className="p-6 rounded-2xl bg-dark-surface/40 border border-dark-border/60 flex flex-col gap-6">
+        <div className="p-5 sm:p-6 rounded-2xl bg-dark-surface/40 border border-dark-border/60 flex flex-col gap-6">
           <div>
             <h2 className="text-base font-semibold text-white">Theme</h2>
             <p className="text-xs text-gray-400 mt-1">
@@ -454,14 +469,14 @@ export const SettingsPage = () => {
 
           <div className="pt-4 border-t border-dark-border/60">
             <h3 className="text-sm font-semibold text-white mb-3">Preview</h3>
-            <div className="rounded-xl border border-dark-border bg-dark-card p-4 flex items-center gap-4">
-              <div className="w-24 aspect-video rounded-lg bg-dark-hover shrink-0" />
+            <div className="rounded-xl border border-dark-border bg-dark-card p-4 flex items-center gap-3 sm:gap-4">
+              <div className="w-20 sm:w-24 aspect-video rounded-lg bg-dark-hover shrink-0" />
               <div className="flex-1 min-w-0 space-y-2">
                 <p className="text-sm font-semibold text-white truncate">
                   This is how a video title looks
                 </p>
                 <p className="text-xs text-gray-400">Channel name • 1.2K views • 2 days ago</p>
-                <div className="flex gap-2 pt-1">
+                <div className="flex flex-wrap gap-2 pt-1">
                   <span className="px-3 py-1 rounded-full bg-brand text-on-accent text-[11px] font-semibold">
                     Primary
                   </span>
@@ -479,7 +494,7 @@ export const SettingsPage = () => {
       {activeTab === 'security' && (
         <form
           onSubmit={handleChangePassword}
-          className="p-6 rounded-2xl bg-dark-surface/40 border border-dark-border/60 flex flex-col gap-5"
+          className="p-5 sm:p-6 rounded-2xl bg-dark-surface/40 border border-dark-border/60 flex flex-col gap-5"
         >
           <div className="flex items-start justify-between gap-4">
             <div>
@@ -555,7 +570,7 @@ export const SettingsPage = () => {
       )}
 
       {/* Account summary + sign out — shown alongside every tab */}
-      <div className="p-6 rounded-2xl bg-dark-surface/40 border border-dark-border/60 flex flex-col gap-5">
+      <div className="p-5 sm:p-6 rounded-2xl bg-dark-surface/40 border border-dark-border/60 flex flex-col gap-5">
         <h2 className="text-base font-semibold text-white">Account</h2>
 
         <dl className="grid sm:grid-cols-3 gap-4">
@@ -599,7 +614,7 @@ export const SettingsPage = () => {
           <button
             type="button"
             onClick={() => setSignOutOpen(true)}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium text-red-400 hover:text-red-300 hover:bg-red-500/10 border border-red-500/30 transition-colors shrink-0"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium text-danger hover:text-danger-hover hover:bg-red-500/10 border border-red-500/30 transition-colors shrink-0"
           >
             <LogOut className="w-4 h-4" />
             <span>Sign out</span>

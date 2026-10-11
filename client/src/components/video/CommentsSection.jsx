@@ -169,14 +169,14 @@ export const CommentsSection = ({ videoId }) => {
       </div>
 
       {/* Add comment box */}
-      <div className="flex gap-4 items-start">
+      <div className="flex gap-3 sm:gap-4 items-start">
         <img
           src={user?.avatar || DEFAULT_AVATAR}
           alt="Avatar"
           className="w-10 h-10 rounded-full object-cover border border-dark-border shrink-0 mt-1"
         />
 
-        <form onSubmit={handleAddComment} className="flex-1 flex flex-col gap-2">
+        <form onSubmit={handleAddComment} className="flex-1 min-w-0 flex flex-col gap-2">
           <input
             type="text"
             placeholder={isAuthenticated ? 'Add a comment...' : 'Sign in to add a comment...'}
@@ -216,7 +216,7 @@ export const CommentsSection = ({ videoId }) => {
       {loading ? (
         <div className="flex flex-col gap-4 py-4">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="flex gap-4 items-start">
+            <div key={i} className="flex gap-3 sm:gap-4 items-start">
               <div className="w-10 h-10 rounded-full bg-dark-card skeleton shrink-0" />
               <div className="flex-1 flex flex-col gap-2">
                 <div className="h-4 w-32 rounded bg-dark-card skeleton" />
@@ -237,7 +237,7 @@ export const CommentsSection = ({ videoId }) => {
             const isEditing = editingCommentId === comment._id;
 
             return (
-              <div key={comment._id} className="flex gap-4 items-start group">
+              <div key={comment._id} className="flex gap-3 sm:gap-4 items-start group">
                 {/* Author Avatar */}
                 <Link to={`/c/${author.username || ''}`} className="shrink-0">
                   <img
@@ -256,7 +256,7 @@ export const CommentsSection = ({ videoId }) => {
                     >
                       @{author.username || author.fullName || 'user'}
                     </Link>
-                    <span className="text-[11px] text-gray-400">
+                    <span className="text-[11px] text-gray-400 shrink-0 whitespace-nowrap">
                       {timeAgo(comment.createdAt)}
                     </span>
                   </div>
@@ -293,10 +293,10 @@ export const CommentsSection = ({ videoId }) => {
                   )}
 
                   {/* Comment Actions (Like, Edit, Delete) */}
-                  <div className="flex items-center gap-3 mt-2">
+                  <div className="flex items-center gap-3 mt-1.5 -ml-2">
                     <button
                       onClick={() => handleToggleLikeComment(comment._id)}
-                      className={`flex items-center gap-1.5 text-xs font-medium rounded-full py-1 px-2 transition-colors ${
+                      className={`flex items-center gap-1.5 text-xs font-medium rounded-full py-1.5 px-2 transition-colors ${
                         comment.isLiked
                           ? 'text-brand'
                           : 'text-gray-400 hover:text-white hover:bg-dark-hover'
@@ -306,21 +306,22 @@ export const CommentsSection = ({ videoId }) => {
                       {comment.likesCount > 0 && <span>{comment.likesCount}</span>}
                     </button>
 
+                    {/* Revealed on hover where hover exists; touch screens always show them */}
                     {isAuthor && !isEditing && (
-                      <div className="opacity-0 group-hover:opacity-100 flex items-center gap-1 transition-opacity">
+                      <div className="flex items-center gap-1 transition-opacity [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:opacity-100 [@media(hover:hover)]:focus-within:opacity-100">
                         <button
                           onClick={() => {
                             setEditingCommentId(comment._id);
                             setEditContent(comment.content);
                           }}
-                          className="p-1 text-gray-400 hover:text-white rounded hover:bg-dark-hover"
+                          className="p-2 sm:p-1.5 text-gray-400 hover:text-white rounded-full hover:bg-dark-hover transition-colors"
                           title="Edit comment"
                         >
                           <Edit3 className="w-3.5 h-3.5" />
                         </button>
                         <button
                           onClick={() => setCommentToDelete(comment)}
-                          className="p-1 text-gray-400 hover:text-red-400 rounded hover:bg-dark-hover"
+                          className="p-2 sm:p-1.5 text-gray-400 hover:text-danger rounded-full hover:bg-dark-hover transition-colors"
                           title="Delete comment"
                         >
                           <Trash2 className="w-3.5 h-3.5" />

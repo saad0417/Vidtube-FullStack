@@ -152,18 +152,21 @@ export const ChannelPage = () => {
 
       {/* Channel Header Bar */}
       <div className="px-4 sm:px-8 pt-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-        <div className="flex items-center gap-5">
+        <div className="flex items-center gap-4 sm:gap-5 min-w-0 max-w-full">
+          {/* `relative z-10`: the banner image is positioned, so without its own
+              stacking level the avatar is painted underneath the banner where
+              the two overlap. */}
           <img
             src={channel.avatar || DEFAULT_AVATAR}
             alt={channel.fullName}
-            className="w-20 h-20 sm:w-28 sm:h-28 rounded-full object-cover border-4 border-dark-base shadow-xl -mt-10 sm:-mt-14"
+            className="relative z-10 shrink-0 w-20 h-20 sm:w-28 sm:h-28 rounded-full object-cover border-4 border-dark-base shadow-xl -mt-10 sm:-mt-14"
           />
-          <div className="flex flex-col">
-            <h1 className="text-2xl sm:text-3xl font-bold text-white flex items-center gap-2">
-              <span>{channel.fullName}</span>
-              <CheckCircle2 className="w-5 h-5 text-gray-400" />
+          <div className="flex flex-col min-w-0">
+            <h1 className="text-2xl sm:text-3xl font-bold text-white flex items-center gap-2 min-w-0">
+              <span className="truncate">{channel.fullName}</span>
+              <CheckCircle2 className="w-5 h-5 text-gray-400 shrink-0" />
             </h1>
-            <p className="text-sm text-gray-400 mt-0.5">
+            <p className="text-sm text-gray-400 mt-0.5 truncate">
               @{channel.username}
             </p>
             <div className="flex items-center gap-2 text-xs text-gray-400 mt-1">
@@ -177,9 +180,9 @@ export const ChannelPage = () => {
         </div>
 
         {/* Action Button */}
-        <div>
+        <div className="shrink-0">
           {isChannelOwner ? (
-            <div className="flex items-center gap-3">
+            <div className="flex flex-wrap items-center gap-3">
               {isCreator ? (
                 <Link to="/studio" className="btn-primary">
                   VidTube Studio
@@ -218,7 +221,8 @@ export const ChannelPage = () => {
       </div>
 
       {/* Tabs Navigation */}
-      <div className="flex items-center gap-8 px-4 sm:px-8 mt-8 border-b border-dark-border/60">
+      {/* Scrolls sideways on narrow phones instead of pushing the page wider. */}
+      <div className="flex items-center gap-6 sm:gap-8 px-4 sm:px-8 mt-8 border-b border-dark-border/60 overflow-x-auto scrollbar-none">
         {[
           { id: 'videos', label: 'Videos', icon: Video },
           { id: 'playlists', label: 'Playlists', icon: ListVideo },
@@ -231,7 +235,7 @@ export const ChannelPage = () => {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center gap-2 pb-3 text-sm font-semibold border-b-2 transition-all capitalize ${
+              className={`flex items-center gap-2 pb-3 shrink-0 whitespace-nowrap text-sm font-semibold border-b-2 transition-all capitalize ${
                 isActive
                   ? 'border-brand text-brand'
                   : 'border-transparent text-gray-400 hover:text-white'

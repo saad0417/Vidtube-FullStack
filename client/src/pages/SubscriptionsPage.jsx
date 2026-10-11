@@ -80,7 +80,7 @@ export const SubscriptionsPage = () => {
 
       {/* Channel strip */}
       {channels.length > 0 && (
-        <div className="flex items-center gap-5 overflow-x-auto pb-3 border-b border-dark-border/60">
+        <div className="flex items-center gap-5 overflow-x-auto scrollbar-none pb-3 border-b border-dark-border/60">
           {channels.map((channel) => (
             <Link
               key={channel._id}

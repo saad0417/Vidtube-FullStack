@@ -60,14 +60,14 @@ export const Navbar = ({ onOpenUpload }) => {
 
   return (
     <header
-      className="sticky top-0 z-40 w-full px-3 sm:px-4 py-2 flex items-center justify-between gap-2 sm:gap-4
+      className="sticky top-0 z-40 w-full px-2 min-[400px]:px-3 sm:px-4 py-2 flex items-center justify-between gap-1 min-[400px]:gap-2 sm:gap-4
         bg-dark-base/60 supports-[backdrop-filter]:bg-dark-base/45
         backdrop-blur-2xl backdrop-saturate-[1.8]
         border-b border-white/10
         shadow-[0_1px_0_0_rgb(255_255_255/0.06)_inset,0_8px_32px_-12px_rgb(0_0_0/0.45)]"
     >
       {/* Left: Hamburger & Logo */}
-      <div className="flex items-center gap-2.5 sm:gap-4 shrink-0">
+      <div className="flex items-center gap-1 min-[400px]:gap-2.5 sm:gap-4 shrink-0">
         <button
           onClick={toggleSidebar}
           className="p-2 text-gray-300 hover:text-white hover:bg-dark-hover rounded-full transition-colors"
@@ -79,8 +79,8 @@ export const Navbar = ({ onOpenUpload }) => {
         <Link to="/" className="group shrink-0" aria-label="VidTube home">
           <Logo
             id="nav"
-            markClassName="w-9 h-9 sm:w-11 sm:h-11 group-hover:scale-105 transition-transform duration-200"
-            wordmarkClassName="text-[19px] sm:text-[23px]"
+            markClassName="w-8 h-8 min-[400px]:w-9 min-[400px]:h-9 sm:w-11 sm:h-11 group-hover:scale-105 transition-transform duration-200"
+            wordmarkClassName="text-[17px] min-[400px]:text-[19px] sm:text-[23px]"
           />
         </Link>
       </div>
@@ -123,11 +123,13 @@ export const Navbar = ({ onOpenUpload }) => {
       </div>
 
       {/* Right: Actions & Profile */}
-      <div className="flex items-center gap-2 sm:gap-3">
+      <div className="flex items-center gap-0.5 min-[400px]:gap-2 sm:gap-3 shrink-0">
         {/* Mobile Search Toggle */}
         <button
           onClick={() => setIsMobileSearchOpen(!isMobileSearchOpen)}
           className="sm:hidden p-2 text-gray-300 hover:text-white hover:bg-dark-hover rounded-full"
+          aria-label="Search"
+          title="Search"
         >
           <Search className="w-5 h-5" />
         </button>
@@ -152,8 +154,9 @@ export const Navbar = ({ onOpenUpload }) => {
             {isCreator ? (
               <button
                 onClick={onOpenUpload}
-                className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-dark-card hover:bg-dark-hover border border-dark-border text-gray-200 hover:text-white text-sm font-medium transition-all hover:border-brand/40 group"
+                className="flex items-center gap-1.5 p-2 md:px-3.5 md:py-1.5 rounded-full bg-dark-card hover:bg-dark-hover border border-dark-border text-gray-200 hover:text-white text-sm font-medium whitespace-nowrap transition-all hover:border-brand/40 group"
                 title="Upload video"
+                aria-label="Upload video"
               >
                 <Plus className="w-4 h-4 text-brand group-hover:rotate-90 transition-transform duration-200" />
                 <span className="hidden md:inline">Create</span>
@@ -161,8 +164,9 @@ export const Navbar = ({ onOpenUpload }) => {
             ) : (
               <Link
                 to="/create-channel"
-                className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-dark-card hover:bg-dark-hover border border-dark-border text-gray-200 hover:text-white text-sm font-medium transition-all hover:border-brand/40"
+                className="flex items-center gap-1.5 p-2 md:px-3.5 md:py-1.5 rounded-full bg-dark-card hover:bg-dark-hover border border-dark-border text-gray-200 hover:text-white text-sm font-medium whitespace-nowrap transition-all hover:border-brand/40"
                 title="Create your channel"
+                aria-label="Create your channel"
               >
                 <BadgePlus className="w-4 h-4 text-brand" />
                 <span className="hidden md:inline">Create channel</span>
@@ -170,15 +174,17 @@ export const Navbar = ({ onOpenUpload }) => {
             )}
 
             {/* Profile Menu Dropdown */}
-            <div className="relative" ref={dropdownRef}>
+            <div className="relative shrink-0" ref={dropdownRef}>
               <button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                 className="flex items-center rounded-full ring-2 ring-transparent hover:ring-brand/60 transition-all focus:outline-none"
+                aria-label="Account menu"
+                aria-expanded={isDropdownOpen}
               >
                 <img
                   src={user?.avatar || DEFAULT_AVATAR}
                   alt={user?.fullName || 'User'}
-                  className="w-8 h-8 rounded-full object-cover border border-dark-border"
+                  className="w-8 h-8 shrink-0 rounded-full object-cover border border-dark-border"
                   onError={(e) => {
                     e.target.src = DEFAULT_AVATAR;
                   }}
@@ -186,7 +192,7 @@ export const Navbar = ({ onOpenUpload }) => {
               </button>
 
               {isDropdownOpen && (
-                <div className="absolute right-0 mt-2 w-64 bg-dark-surface border border-dark-border rounded-xl shadow-2xl py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
+                <div className="absolute right-0 mt-2 w-64 max-w-[calc(100vw-1rem)] bg-dark-surface border border-dark-border rounded-xl shadow-2xl py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
                   {/* User Profile Header */}
                   <div className="px-4 py-3 border-b border-dark-border/60 flex items-center gap-3">
                     <img
@@ -253,7 +259,7 @@ export const Navbar = ({ onOpenUpload }) => {
                         setIsDropdownOpen(false);
                         logout();
                       }}
-                      className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-colors"
+                      className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-danger hover:text-danger-hover hover:bg-red-500/10 transition-colors"
                     >
                       <LogOut className="w-4 h-4" />
                       <span>Sign Out</span>
@@ -266,10 +272,12 @@ export const Navbar = ({ onOpenUpload }) => {
         ) : (
           <Link
             to="/login"
-            className="flex items-center gap-2 px-4 py-1.5 rounded-full border border-blue-500/50 hover:bg-blue-500/10 text-blue-400 hover:text-blue-300 text-sm font-medium transition-all"
+            aria-label="Sign in"
+            className="flex items-center gap-2 p-2 min-[360px]:px-3 min-[360px]:py-1.5 min-[400px]:px-4 rounded-full border border-blue-500/50 hover:bg-blue-500/10 text-blue-400 hover:text-blue-300 text-sm font-medium whitespace-nowrap transition-all"
           >
             <UserIcon className="w-4 h-4" />
-            <span>Sign In</span>
+            {/* Below 360px the label would push the bar past the screen edge. */}
+            <span className="hidden min-[360px]:inline">Sign In</span>
           </Link>
         )}
       </div>
@@ -283,19 +291,24 @@ export const Navbar = ({ onOpenUpload }) => {
               placeholder="Search VidTube..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="flex-1 bg-dark-input text-white text-sm rounded-full border border-dark-border px-4 py-2 focus:outline-none focus:border-brand"
+              aria-label="Search"
+              // min-w-0: an input's intrinsic width would otherwise push the
+              // close button off a 320px screen.
+              className="flex-1 min-w-0 bg-dark-input text-white text-sm rounded-full border border-dark-border px-4 py-2 focus:outline-none focus:border-brand"
               autoFocus
             />
             <button
               type="submit"
-              className="p-2 bg-brand text-on-accent rounded-full"
+              className="p-2 shrink-0 bg-brand text-on-accent rounded-full"
+              aria-label="Search"
             >
               <Search className="w-4 h-4" />
             </button>
             <button
               type="button"
               onClick={() => setIsMobileSearchOpen(false)}
-              className="p-2 text-gray-400 hover:text-white"
+              className="p-2 shrink-0 text-gray-400 hover:text-white"
+              aria-label="Close search"
             >
               <X className="w-5 h-5" />
             </button>

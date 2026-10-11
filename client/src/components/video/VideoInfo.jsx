@@ -108,8 +108,8 @@ export const VideoInfo = ({ video, onOpenSavePlaylist }) => {
       {/* Channel Bar & Action Buttons */}
       <div className="flex flex-wrap items-center justify-between gap-4 pb-2">
         {/* Channel Details */}
-        <div className="flex items-center gap-3">
-          <Link to={`/c/${owner.username}`}>
+        <div className="flex items-center gap-3 min-w-0 max-w-full">
+          <Link to={`/c/${owner.username}`} className="shrink-0">
             <img
               src={owner.avatar || DEFAULT_AVATAR}
               alt={owner.fullName || owner.username}
@@ -120,13 +120,13 @@ export const VideoInfo = ({ video, onOpenSavePlaylist }) => {
             />
           </Link>
 
-          <div className="flex flex-col">
+          <div className="flex flex-col min-w-0">
             <Link
               to={`/c/${owner.username}`}
-              className="text-base font-semibold text-white hover:text-gray-200 flex items-center gap-1.5 transition-colors"
+              className="text-base font-semibold text-white hover:text-gray-200 flex items-center gap-1.5 min-w-0 transition-colors"
             >
-              <span>{owner.fullName || owner.username}</span>
-              <CheckCircle2 className="w-4 h-4 text-gray-400" />
+              <span className="truncate">{owner.fullName || owner.username}</span>
+              <CheckCircle2 className="w-4 h-4 text-gray-400 shrink-0" />
             </Link>
             <span className="text-xs text-gray-400">
               {formatSubscribers(subscribersCount)}
@@ -138,7 +138,7 @@ export const VideoInfo = ({ video, onOpenSavePlaylist }) => {
             <button
               onClick={handleToggleSubscription}
               disabled={isSubscribing}
-              className={`ml-3 px-5 py-2 rounded-full text-sm font-semibold transition-all duration-200 flex items-center gap-1.5 shadow-sm active:scale-95 ${
+              className={`ml-1 sm:ml-3 px-5 py-2 shrink-0 whitespace-nowrap rounded-full text-sm font-semibold transition-all duration-200 flex items-center gap-1.5 shadow-sm active:scale-95 ${
                 isSubscribed
                   ? 'bg-dark-card hover:bg-dark-hover text-gray-300 border border-dark-border'
                   : 'bg-white hover:bg-gray-200 text-black'
@@ -188,6 +188,7 @@ export const VideoInfo = ({ video, onOpenSavePlaylist }) => {
             onClick={onOpenSavePlaylist}
             className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium bg-dark-card hover:bg-dark-hover border border-dark-border text-white transition-all active:scale-95"
             title="Save to playlist"
+            aria-label="Save to playlist"
           >
             <BookmarkPlus className="w-4 h-4" />
             <span className="hidden sm:inline">Save</span>
@@ -200,10 +201,11 @@ export const VideoInfo = ({ video, onOpenSavePlaylist }) => {
         className="p-4 rounded-2xl bg-dark-card/90 border border-dark-border/60 text-sm cursor-pointer hover:bg-dark-card transition-colors"
         onClick={() => setIsDescriptionExpanded(!isDescriptionExpanded)}
       >
-        <div className="flex items-center gap-3 font-semibold text-white mb-2">
-          <span>{formatViews(video.views)}</span>
-          <span>•</span>
-          <span>Published {formatDate(video.createdAt)}</span>
+        {/* Each phrase stays whole; on a narrow phone the date moves to its own line. */}
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 font-semibold text-white mb-2">
+          <span className="whitespace-nowrap">{formatViews(video.views)}</span>
+          <span aria-hidden="true">•</span>
+          <span className="whitespace-nowrap">Published {formatDate(video.createdAt)}</span>
         </div>
 
         <p className={`text-gray-300 whitespace-pre-line leading-relaxed ${isDescriptionExpanded ? '' : 'line-clamp-3'}`}>

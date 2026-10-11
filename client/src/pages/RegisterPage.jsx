@@ -133,7 +133,7 @@ export const RegisterPage = () => {
   };
 
   const fieldError = (name) =>
-    errors[name] ? <p className="text-xs text-red-400 mt-1.5">{errors[name]}</p> : null;
+    errors[name] ? <p className="text-xs text-danger mt-1.5">{errors[name]}</p> : null;
 
   return (
     <div>
@@ -148,7 +148,7 @@ export const RegisterPage = () => {
         {errors.form && (
           <div
             role="alert"
-            className="px-4 py-3 rounded-lg bg-red-500/10 border border-red-500/30 text-sm text-red-300"
+            className="px-4 py-3 rounded-lg bg-red-500/10 border border-red-500/30 text-sm text-danger"
           >
             {errors.form}
           </div>
@@ -178,7 +178,8 @@ export const RegisterPage = () => {
                 </button>
               </>
             ) : (
-              <div className="w-full h-full flex flex-col items-center justify-center gap-1 text-gray-500 group-hover:text-gray-300 transition-colors">
+              // `pb-8` centres the prompt in the part of the box the avatar doesn't cover.
+              <div className="w-full h-full pb-8 flex flex-col items-center justify-center gap-1 text-gray-500 group-hover:text-gray-300 transition-colors">
                 <ImagePlus className="w-5 h-5" />
                 <span className="text-xs font-medium">Add a cover image (optional)</span>
               </div>
@@ -193,9 +194,11 @@ export const RegisterPage = () => {
           />
 
           {/* The avatar deliberately overlaps the cover, the way a channel header
-              reads. `items-end` keeps the caption on the avatar's baseline
-              instead of floating against its middle. */}
-          <div className="flex items-end gap-4 -mt-10 ml-5 mb-1 relative z-10">
+              reads. The caption starts just below the cover's bottom edge
+              (`pt-11` = the 40px overlap plus a gap): aligned to the avatar's
+              baseline instead, a two-line caption sat on the cover's border and
+              a wrapped one on a phone sat inside the cover. */}
+          <div className="flex items-start gap-3 sm:gap-4 -mt-10 ml-4 sm:ml-5 mb-1 relative z-10">
             <button
               type="button"
               onClick={() => avatarInputRef.current?.click()}
@@ -214,7 +217,7 @@ export const RegisterPage = () => {
               </span>
             </button>
 
-            <div className="pb-1.5 min-w-0">
+            <div className="pt-11 min-w-0">
               <p className="text-xs font-semibold text-gray-300">
                 Profile picture <span className="text-brand">*</span>
               </p>

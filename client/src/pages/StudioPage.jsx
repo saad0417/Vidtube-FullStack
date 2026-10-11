@@ -32,6 +32,11 @@ const compact = (value) => {
   return String(num);
 };
 
+// Shared by the heading row and every video row. Narrower fixed columns at lg
+// leave the title enough room before the sidebar-less xl layout widens them.
+const TABLE_COLUMNS =
+  'lg:grid-cols-[minmax(0,1fr)_104px_64px_112px_112px] xl:grid-cols-[minmax(0,1fr)_132px_90px_140px_120px]';
+
 export const StudioPage = () => {
   const [stats, setStats] = useState(null);
   const [videos, setVideos] = useState([]);
@@ -119,7 +124,8 @@ export const StudioPage = () => {
       />
 
       {/* Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3 sm:gap-4">
+      {/* Five cards in two columns would leave a gap, so the last one spans the row */}
+      <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3 sm:gap-4 [&>:last-child]:col-span-2 lg:[&>:last-child]:col-span-1">
         <StatsCard title="Videos" value={compact(stats?.totalVideos)} icon={VideoIcon} />
         <StatsCard
           title="Total views"
@@ -171,7 +177,7 @@ export const StudioPage = () => {
         ) : (
           <div className="rounded-2xl border border-dark-border/60 bg-dark-surface/40 overflow-hidden">
             {/* Column headings — desktop only, the mobile layout stacks instead */}
-            <div className="hidden lg:grid grid-cols-[minmax(0,1fr)_132px_90px_140px_120px] gap-4 px-5 py-3 border-b border-dark-border/60 text-[11px] font-semibold text-gray-400 uppercase tracking-wider">
+            <div className={`hidden lg:grid ${TABLE_COLUMNS} gap-4 px-5 py-3 border-b border-dark-border/60 text-[11px] font-semibold text-gray-400 uppercase tracking-wider`}>
               <span>Video</span>
               <span>Visibility</span>
               <span>Views</span>
@@ -183,13 +189,13 @@ export const StudioPage = () => {
               {videos.map((video) => (
                 <div
                   key={video._id}
-                  className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_132px_90px_140px_120px] gap-4 px-5 py-4 items-center hover:bg-dark-hover/40 transition-colors"
+                  className={`grid grid-cols-[minmax(0,1fr)_auto] ${TABLE_COLUMNS} gap-x-4 gap-y-3 px-4 sm:px-5 py-4 items-center hover:bg-dark-hover/40 transition-colors`}
                 >
-                  {/* Video cell */}
-                  <div className="flex gap-3.5 min-w-0">
+                  {/* Video cell — full width on small screens, with visibility and actions sharing the row below */}
+                  <div className="col-span-2 lg:col-span-1 flex gap-3.5 min-w-0">
                     <Link
                       to={`/watch/${video._id}`}
-                      className="relative w-28 aspect-video rounded-lg overflow-hidden bg-dark-card shrink-0 border border-dark-border/50"
+                      className="relative w-24 xs:w-28 sm:w-32 lg:w-28 aspect-video rounded-lg overflow-hidden bg-dark-card shrink-0 border border-dark-border/50"
                     >
                       <img
                         src={video.thumbnail || DEFAULT_THUMBNAIL}
@@ -210,7 +216,7 @@ export const StudioPage = () => {
                     <div className="min-w-0 flex flex-col justify-center">
                       <Link
                         to={`/watch/${video._id}`}
-                        className="text-sm font-semibold text-white line-clamp-1 hover:text-brand-light transition-colors"
+                        className="text-sm font-semibold text-white line-clamp-2 lg:line-clamp-1 hover:text-brand-light transition-colors"
                         title={video.title}
                       >
                         {video.title}
@@ -218,39 +224,43 @@ export const StudioPage = () => {
                       <p className="text-xs text-gray-400 line-clamp-1 mt-1">
                         {video.description}
                       </p>
-                      <div className="flex lg:hidden items-center gap-2 text-[11px] text-gray-500 mt-1.5">
-                        <span>{video.views || 0} views</span>
+                      <div className="flex lg:hidden flex-wrap items-center gap-x-2 text-[11px] text-gray-500 mt-1.5 whitespace-nowrap">
+                        <span>{compact(video.views)} views</span>
                         <span>•</span>
                         <span>{formatDate(video.createdAt)}</span>
                       </div>
                     </div>
                   </div>
 
-                  {/* Visibility toggle */}
-                  <div className="flex items-center gap-2">
+                  {/* Visibility toggle — the label is part of the button so the whole thing is tappable */}
+                  <div className="flex items-center">
                     <button
                       onClick={() => handleTogglePublish(video)}
                       disabled={togglingId === video._id}
                       role="switch"
                       aria-checked={Boolean(video.isPublished)}
                       aria-label={video.isPublished ? 'Make private' : 'Make public'}
-                      className={`relative w-9 h-5 rounded-full transition-colors shrink-0 disabled:opacity-60 ${
-                        video.isPublished ? 'bg-brand' : 'bg-dark-border'
-                      }`}
+                      className="flex items-center gap-2 py-1.5 disabled:opacity-60"
                     >
                       <span
-                        className={`absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform ${
-                          video.isPublished ? 'translate-x-4' : 'translate-x-0'
+                        className={`relative w-9 h-5 rounded-full transition-colors shrink-0 ${
+                          video.isPublished ? 'bg-brand' : 'bg-dark-border'
                         }`}
-                      />
+                      >
+                        <span
+                          className={`absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-on-accent shadow transition-transform ${
+                            video.isPublished ? 'translate-x-4' : 'translate-x-0'
+                          }`}
+                        />
+                      </span>
+                      <span
+                        className={`text-xs font-medium whitespace-nowrap ${
+                          video.isPublished ? 'text-emerald-400' : 'text-gray-400'
+                        }`}
+                      >
+                        {video.isPublished ? 'Public' : 'Private'}
+                      </span>
                     </button>
-                    <span
-                      className={`text-xs font-medium whitespace-nowrap ${
-                        video.isPublished ? 'text-emerald-400' : 'text-gray-400'
-                      }`}
-                    >
-                      {video.isPublished ? 'Public' : 'Private'}
-                    </span>
                   </div>
 
                   <span className="hidden lg:block text-sm text-gray-300">
@@ -262,7 +272,7 @@ export const StudioPage = () => {
                   </span>
 
                   {/* Row actions */}
-                  <div className="flex items-center gap-1 lg:justify-end">
+                  <div className="flex items-center justify-end gap-1">
                     <Link
                       to={`/watch/${video._id}`}
                       className="p-2 text-gray-400 hover:text-white hover:bg-dark-hover rounded-full transition-colors"
@@ -279,7 +289,7 @@ export const StudioPage = () => {
                     </button>
                     <button
                       onClick={() => setVideoToDelete(video)}
-                      className="p-2 text-gray-400 hover:text-red-400 hover:bg-red-500/10 rounded-full transition-colors"
+                      className="p-2 text-gray-400 hover:text-danger hover:bg-red-500/10 rounded-full transition-colors"
                       title="Delete video"
                     >
                       <Trash2 className="w-4 h-4" />

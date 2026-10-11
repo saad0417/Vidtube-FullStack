@@ -106,7 +106,7 @@ export const UploadVideoModal = ({ isOpen, onClose, onUploadSuccess }) => {
         {!videoFile ? (
           <div
             onClick={() => videoInputRef.current?.click()}
-            className="border-2 border-dashed border-dark-border hover:border-brand/60 rounded-2xl p-8 flex flex-col items-center justify-center gap-3 cursor-pointer bg-dark-card/50 hover:bg-dark-card transition-colors text-center group"
+            className="border-2 border-dashed border-dark-border hover:border-brand/60 rounded-2xl p-6 sm:p-8 flex flex-col items-center justify-center gap-3 cursor-pointer bg-dark-card/50 hover:bg-dark-card transition-colors text-center group"
           >
             <div className="w-16 h-16 rounded-full bg-dark-card flex items-center justify-center text-gray-400 group-hover:text-brand group-hover:scale-110 transition-all">
               <Upload className="w-8 h-8" />
@@ -126,10 +126,10 @@ export const UploadVideoModal = ({ isOpen, onClose, onUploadSuccess }) => {
             />
           </div>
         ) : (
-          <div className="flex items-center justify-between p-3 rounded-xl bg-dark-card border border-dark-border">
+          <div className="flex items-center justify-between gap-3 p-3 rounded-xl bg-dark-card border border-dark-border">
             <div className="flex items-center gap-3 min-w-0">
               <Film className="w-6 h-6 text-brand shrink-0" />
-              <div className="truncate">
+              <div className="min-w-0">
                 <p className="text-sm font-medium text-white truncate">{videoFile.name}</p>
                 <p className="text-xs text-gray-400">
                   {(videoFile.size / (1024 * 1024)).toFixed(2)} MB
@@ -140,7 +140,8 @@ export const UploadVideoModal = ({ isOpen, onClose, onUploadSuccess }) => {
               <button
                 type="button"
                 onClick={() => setVideoFile(null)}
-                className="p-1 text-gray-400 hover:text-white"
+                aria-label="Remove video"
+                className="p-2 -m-1 text-gray-400 hover:text-white rounded-full hover:bg-dark-hover transition-colors shrink-0"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -153,7 +154,8 @@ export const UploadVideoModal = ({ isOpen, onClose, onUploadSuccess }) => {
           <label className="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2">
             Thumbnail Image *
           </label>
-          <div className="flex items-start gap-4">
+          {/* Side by side the hint gets squeezed into a sliver on phones, so it drops below */}
+          <div className="flex flex-col xs:flex-row xs:items-start gap-3 xs:gap-4">
             <div
               onClick={() => !isUploading && thumbnailInputRef.current?.click()}
               className="w-36 aspect-video rounded-xl border border-dashed border-dark-border hover:border-brand/60 bg-dark-card flex flex-col items-center justify-center cursor-pointer overflow-hidden relative group shrink-0"
@@ -171,7 +173,7 @@ export const UploadVideoModal = ({ isOpen, onClose, onUploadSuccess }) => {
                 </div>
               )}
             </div>
-            <div className="text-xs text-gray-400 leading-relaxed pt-1">
+            <div className="text-xs text-gray-400 leading-relaxed xs:pt-1">
               Select a crisp, high-resolution thumbnail (16:9 ratio recommended). JPG, PNG, or WebP.
             </div>
           </div>
@@ -222,8 +224,8 @@ export const UploadVideoModal = ({ isOpen, onClose, onUploadSuccess }) => {
         {/* Upload Progress Bar */}
         {isUploading && (
           <div className="flex flex-col gap-2 p-4 rounded-xl bg-dark-card border border-dark-border">
-            <div className="flex items-center justify-between text-xs font-medium">
-              <span className="text-gray-300 flex items-center gap-2">
+            <div className="flex items-center justify-between gap-3 text-xs font-medium">
+              <span className="text-gray-300 flex items-center gap-2 min-w-0">
                 <Loader2 className="w-3.5 h-3.5 animate-spin text-brand" />
                 Uploading & processing video...
               </span>

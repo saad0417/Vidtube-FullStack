@@ -25,7 +25,7 @@ export const RelatedVideos = ({ currentVideoId }) => {
       <div className="flex flex-col gap-3">
         {[1, 2, 3, 4, 5].map((i) => (
           <div key={i} className="flex gap-3">
-            <div className="w-40 aspect-video rounded-xl bg-dark-card skeleton shrink-0" />
+            <div className="w-36 sm:w-40 aspect-video rounded-xl bg-dark-card skeleton shrink-0" />
             <div className="flex-1 flex flex-col gap-2 pt-1">
               <div className="h-3 w-5/6 rounded bg-dark-card skeleton" />
               <div className="h-2.5 w-1/2 rounded bg-dark-card skeleton" />
@@ -47,7 +47,7 @@ export const RelatedVideos = ({ currentVideoId }) => {
 
   return (
     <div className="flex flex-col gap-3">
-      <h3 className="text-base font-bold text-white mb-1">Up next</h3>
+      <h3 className="text-base font-bold text-white mb-1 px-1.5">Up next</h3>
       {videos.map((video) => {
         const owner = video.owner || {};
         const ownerName = owner.fullName || owner.username || 'Creator';
@@ -59,14 +59,14 @@ export const RelatedVideos = ({ currentVideoId }) => {
             className="flex gap-3 group hover:bg-dark-hover/40 p-1.5 rounded-xl transition-colors"
           >
             {/* Thumbnail */}
-            <div className="relative w-40 aspect-video rounded-lg overflow-hidden bg-dark-card shrink-0">
+            <div className="relative w-36 sm:w-40 aspect-video rounded-lg overflow-hidden bg-dark-card shrink-0">
               <img
                 src={video.thumbnail || DEFAULT_THUMBNAIL}
                 alt={video.title}
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
               />
               {video.duration > 0 && (
-                <div className="overlay-chip absolute bottom-1 right-1 px-1 py-0.2 rounded text-[10px] font-semibold ">
+                <div className="overlay-chip absolute bottom-1 right-1 px-1 py-px rounded text-[10px] font-semibold">
                   {formatDuration(video.duration)}
                 </div>
               )}
@@ -80,10 +80,10 @@ export const RelatedVideos = ({ currentVideoId }) => {
               <p className="text-xs text-gray-400 truncate mt-1">
                 {ownerName}
               </p>
-              <div className="text-[11px] text-gray-500 flex items-center gap-1 mt-0.5">
-                <span>{formatViews(video.views)}</span>
-                <span>•</span>
-                <span>{timeAgo(video.createdAt)}</span>
+              {/* Wrap whole phrases, never "4 / views", when the column is narrow */}
+              <div className="text-[11px] text-gray-500 flex flex-wrap items-center gap-x-1 mt-0.5">
+                <span className="whitespace-nowrap">{formatViews(video.views)} •</span>
+                <span className="whitespace-nowrap">{timeAgo(video.createdAt)}</span>
               </div>
             </div>
           </Link>

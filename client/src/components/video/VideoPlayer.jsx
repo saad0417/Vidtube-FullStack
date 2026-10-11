@@ -54,6 +54,15 @@ export const VideoPlayer = ({
   // video instead of pillarboxing it into a landscape box.
   const [aspectRatio, setAspectRatio] = useState(null);
 
+  // The control bar has to fit the player, not the page: a portrait video is
+  // narrow even on a laptop. Track the player's own width and drop secondary
+  // controls as it shrinks (they stay reachable by keyboard and double-tap).
+  const [playerWidth, setPlayerWidth] = useState(0);
+  // Phones get a shorter portrait frame so the title and actions stay in view.
+  const [isNarrowScreen, setIsNarrowScreen] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia('(max-width: 639px)').matches
+  );
+
   const [volume, setVolume] = useState(() => {
     const stored = Number(localStorage.getItem(VOLUME_KEY));
     return Number.isFinite(stored) && stored >= 0 && stored <= 1 ? stored : 1;
@@ -272,6 +281,21 @@ export const VideoPlayer = ({
     return () => document.removeEventListener('fullscreenchange', onFsChange);
   }, []);
 
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container || typeof ResizeObserver === 'undefined') return undefined;
+    const observer = new ResizeObserver(([entry]) => setPlayerWidth(entry.contentRect.width));
+    observer.observe(container);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const query = window.matchMedia('(max-width: 639px)');
+    const onChange = (e) => setIsNarrowScreen(e.matches);
+    query.addEventListener('change', onChange);
+    return () => query.removeEventListener('change', onChange);
+  }, []);
+
   useEffect(() => () => {
     clearTimeout(hideControlsTimer.current);
     clearTimeout(flashTimer.current);
@@ -387,17 +411,25 @@ export const VideoPlayer = ({
   const isPortrait = aspectRatio !== null && aspectRatio < 1;
   const frameStyle = isFullscreen
     ? undefined
-    : isPortrait
+    : isPortrait && isNarrowScreen
       ? {
-          // `fit-content` is the key: a block box with `width: auto` fills its
-          // container, so aspect-ratio would never shrink it back.
-          aspectRatio: String(aspectRatio),
-          height: 'min(78vh, 720px)',
-          width: 'fit-content',
-          maxWidth: '100%',
-          margin: '0 auto',
+          // On a phone a portrait frame sized by height would fill the whole
+          // screen and push the title out of view. Use the full width with a
+          // capped height instead; the video is letterboxed inside it.
+          width: '100%',
+          height: 'min(62vh, 560px)',
         }
-      : { aspectRatio: aspectRatio ? String(aspectRatio) : '16 / 9', maxHeight: '82vh' };
+      : isPortrait
+        ? {
+            // `fit-content` is the key: a block box with `width: auto` fills its
+            // container, so aspect-ratio would never shrink it back.
+            aspectRatio: String(aspectRatio),
+            height: 'min(78vh, 720px)',
+            width: 'fit-content',
+            maxWidth: '100%',
+            margin: '0 auto',
+          }
+        : { aspectRatio: aspectRatio ? String(aspectRatio) : '16 / 9', maxHeight: '82vh' };
 
   const progressRatio = duration ? Math.min(currentTime / duration, 1) : 0;
   const bufferedRatio = duration ? Math.min(buffered / duration, 1) : 0;
@@ -405,6 +437,12 @@ export const VideoPlayer = ({
 
   const iconButton =
     'p-2 rounded-full text-white/90 hover:text-white hover:bg-white/15 transition-colors shrink-0';
+
+  // Secondary controls, dropped as the player narrows so the bar never
+  // overflows. 0 means "not measured yet", so everything shows until then.
+  const showVolumeSlider = !playerWidth || playerWidth >= 520;
+  const showPip = !playerWidth || playerWidth >= 480;
+  const showSkipButtons = !playerWidth || playerWidth >= 420;
 
   return (
     <div
@@ -626,28 +664,32 @@ export const VideoPlayer = ({
             {isPlaying ? <Pause className="w-5 h-5 fill-current" /> : <Play className="w-5 h-5 fill-current" />}
           </button>
 
-          <button
-            onClick={() => seekBy(-seekStep)}
-            className={`${iconButton} relative`}
-            aria-label={`Back ${seekStep} seconds (j)`}
-            title={`Back ${seekStep} seconds (j)`}
-          >
-            <RotateCcw className="w-[19px] h-[19px]" />
-            <span className="absolute inset-0 flex items-center justify-center text-[7px] font-bold pt-[1px]">
-              {seekStep}
-            </span>
-          </button>
-          <button
-            onClick={() => seekBy(seekStep)}
-            className={`${iconButton} relative`}
-            aria-label={`Forward ${seekStep} seconds (l)`}
-            title={`Forward ${seekStep} seconds (l)`}
-          >
-            <RotateCw className="w-[19px] h-[19px]" />
-            <span className="absolute inset-0 flex items-center justify-center text-[7px] font-bold pt-[1px]">
-              {seekStep}
-            </span>
-          </button>
+          {showSkipButtons && (
+            <>
+              <button
+                onClick={() => seekBy(-seekStep)}
+                className={`${iconButton} relative`}
+                aria-label={`Back ${seekStep} seconds (j)`}
+                title={`Back ${seekStep} seconds (j)`}
+              >
+                <RotateCcw className="w-[19px] h-[19px]" />
+                <span className="absolute inset-0 flex items-center justify-center text-[7px] font-bold pt-[1px]">
+                  {seekStep}
+                </span>
+              </button>
+              <button
+                onClick={() => seekBy(seekStep)}
+                className={`${iconButton} relative`}
+                aria-label={`Forward ${seekStep} seconds (l)`}
+                title={`Forward ${seekStep} seconds (l)`}
+              >
+                <RotateCw className="w-[19px] h-[19px]" />
+                <span className="absolute inset-0 flex items-center justify-center text-[7px] font-bold pt-[1px]">
+                  {seekStep}
+                </span>
+              </button>
+            </>
+          )}
 
           {/* Volume — the slider expands on hover to keep the bar compact */}
           <div className="flex items-center group/vol">
@@ -655,29 +697,31 @@ export const VideoPlayer = ({
               <VolumeIcon className="w-5 h-5" />
             </button>
 
-            <input
-              type="range"
-              min={0}
-              max={1}
-              step={0.05}
-              value={muted ? 0 : volume}
-              onChange={(e) => applyVolume(Number(e.target.value))}
-              aria-label="Volume"
-              style={{
-                backgroundImage: `linear-gradient(90deg, rgb(255 0 51) ${
-                  (muted ? 0 : volume) * 100
-                }%, rgb(255 255 255 / 0.3) ${(muted ? 0 : volume) * 100}%)`,
-              }}
-              className="w-16 sm:w-20 h-1 rounded-full appearance-none accent-brand cursor-pointer
-                [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3
-                [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:rounded-full
-                [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:shadow
-                [&::-moz-range-thumb]:w-3 [&::-moz-range-thumb]:h-3 [&::-moz-range-thumb]:border-0
-                [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-white"
-            />
+            {showVolumeSlider && (
+              <input
+                type="range"
+                min={0}
+                max={1}
+                step={0.05}
+                value={muted ? 0 : volume}
+                onChange={(e) => applyVolume(Number(e.target.value))}
+                aria-label="Volume"
+                style={{
+                  backgroundImage: `linear-gradient(90deg, rgb(255 0 51) ${
+                    (muted ? 0 : volume) * 100
+                  }%, rgb(255 255 255 / 0.3) ${(muted ? 0 : volume) * 100}%)`,
+                }}
+                className="w-16 sm:w-20 h-1 rounded-full appearance-none accent-brand cursor-pointer
+                  [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3
+                  [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:rounded-full
+                  [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:shadow
+                  [&::-moz-range-thumb]:w-3 [&::-moz-range-thumb]:h-3 [&::-moz-range-thumb]:border-0
+                  [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-white"
+              />
+            )}
           </div>
 
-          <span className="px-2 text-[11px] sm:text-xs font-medium text-white/90 tabular-nums whitespace-nowrap">
+          <span className="px-1.5 sm:px-2 text-[11px] sm:text-xs font-medium text-white/90 tabular-nums whitespace-nowrap">
             {formatTime(currentTime)} <span className="text-white/50">/ {formatTime(duration)}</span>
           </span>
 
@@ -756,7 +800,7 @@ export const VideoPlayer = ({
             )}
           </div>
 
-          {document.pictureInPictureEnabled && (
+          {document.pictureInPictureEnabled && showPip && (
             <button onClick={togglePip} className={`${iconButton} hidden sm:inline-flex`} aria-label="Picture in picture (i)" title="Picture in picture (i)">
               <PictureInPicture2 className="w-5 h-5" />
             </button>

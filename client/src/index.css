@@ -177,6 +177,10 @@ modifiers to them (see tailwind.config.js).
     --c-brand-hover: 204 0 41;
     --c-brand-light: 255 77 109;
 
+    /* Destructive actions and error text (delete, sign out, validation). */
+    --c-danger: 248 113 113;
+    --c-danger-hover: 252 165 165;
+
     --c-base: 15 15 15;
     --c-surface: 24 24 24;
     --c-card: 33 33 33;
@@ -218,6 +222,11 @@ modifiers to them (see tailwind.config.js).
     --c-brand: 206 0 41;
     --c-brand-hover: 168 0 33;
     --c-brand-light: 168 0 33;
+
+    /* The dark theme's red is too faint on white (about 2.8:1); this one
+       clears the 4.5:1 contrast needed for text. */
+    --c-danger: 220 38 38;
+    --c-danger-hover: 185 28 28;
 
     /* Surfaces are stepped far enough apart to read as distinct cards on
        white, and the border is dark enough to outline buttons and inputs
@@ -280,6 +289,17 @@ html {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* Horizontal strips (category chips, tabs) scroll by swipe or trackpad;
+   their scrollbar would only add a grey bar under the row. */
+.scrollbar-none {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
 }
 
 /* Custom modern scrollbar */

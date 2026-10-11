@@ -11,14 +11,14 @@ export const NotFoundPage = () => {
       <LogoMark id="notfound" className="w-16 h-16 mb-6" />
 
       <p className="text-sm font-semibold text-brand uppercase tracking-widest mb-2">404</p>
-      <h1 className="text-4xl font-display font-bold text-white tracking-tight mb-3">
+      <h1 className="text-3xl sm:text-4xl font-display font-bold text-white tracking-tight mb-3">
         This page doesn't exist
       </h1>
       <p className="text-sm text-gray-400 max-w-sm mb-8">
         The link may be broken, or the video or channel you're after has been removed.
       </p>
 
-      <div className="flex items-center gap-3">
+      <div className="flex flex-wrap items-center justify-center gap-3">
         <button onClick={() => navigate(-1)} className="btn-secondary">
           <ArrowLeft className="w-4 h-4" />
           <span>Go back</span>

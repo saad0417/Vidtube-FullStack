@@ -127,7 +127,7 @@ export const SearchPage = () => {
       {/* Header + sort control */}
       <div className="flex items-center justify-between gap-4 border-b border-dark-border/60 pb-4">
         <div className="min-w-0">
-          <h1 className="text-lg font-semibold text-white truncate">
+          <h1 className="text-lg font-semibold text-white line-clamp-2 break-words">
             Results for <span className="text-brand">“{query}”</span>
           </h1>
           {!loading && (
@@ -178,19 +178,19 @@ export const SearchPage = () => {
       {channel && (
         <Link
           to={`/c/${channel.username}`}
-          className="flex items-center gap-5 p-5 rounded-2xl bg-dark-surface/50 border border-dark-border/60 hover:border-brand/40 transition-colors"
+          className="flex items-center gap-4 sm:gap-5 p-4 sm:p-5 rounded-2xl bg-dark-surface/50 border border-dark-border/60 hover:border-brand/40 transition-colors"
         >
           <img
             src={channel.avatar || DEFAULT_AVATAR}
             alt={channel.fullName}
-            className="w-20 h-20 rounded-full object-cover border border-dark-border shrink-0"
+            className="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover border border-dark-border shrink-0"
             onError={(e) => {
               e.currentTarget.src = DEFAULT_AVATAR;
             }}
           />
           <div className="min-w-0">
             <h2 className="text-base font-semibold text-white truncate">{channel.fullName}</h2>
-            <p className="text-xs text-gray-400 mt-0.5">
+            <p className="text-xs text-gray-400 mt-0.5 truncate">
               @{channel.username} • {formatSubscribers(channel.subscribersCount)}
             </p>
             <p className="text-xs text-gray-500 mt-2">Channel · View profile</p>
@@ -203,7 +203,7 @@ export const SearchPage = () => {
         <div className="space-y-6">
           {[1, 2, 3, 4].map((n) => (
             <div key={n} className="flex flex-col sm:flex-row gap-4">
-              <div className="w-full sm:w-80 aspect-video rounded-xl bg-dark-card skeleton shrink-0" />
+              <div className="w-full sm:w-2/5 sm:max-w-80 aspect-video rounded-xl bg-dark-card skeleton shrink-0" />
               <div className="flex-1 space-y-3 pt-1">
                 <div className="h-4 w-3/4 rounded bg-dark-card skeleton" />
                 <div className="h-3 w-1/3 rounded bg-dark-card skeleton" />

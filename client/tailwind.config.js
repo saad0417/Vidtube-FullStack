@@ -40,6 +40,10 @@ export default {
 
         // Fixed foreground for content on coloured fills — never themed.
         'on-accent': themed('--c-on-accent'),
+        danger: {
+          DEFAULT: themed('--c-danger'),
+          hover:   themed('--c-danger-hover'),
+        },
 
         brand: {
           DEFAULT: themed('--c-brand'),

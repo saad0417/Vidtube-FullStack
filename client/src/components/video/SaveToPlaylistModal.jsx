@@ -117,18 +117,19 @@ export const SaveToPlaylistModal = ({ isOpen, onClose, videoId }) => {
               return (
                 <label
                   key={playlist._id}
-                  className="flex items-center justify-between p-2.5 rounded-xl hover:bg-dark-hover cursor-pointer transition-colors"
+                  className="flex items-center justify-between gap-3 p-2.5 rounded-xl hover:bg-dark-hover cursor-pointer transition-colors"
                 >
-                  <span className="text-sm font-medium text-white truncate pr-2">
+                  <span className="text-sm font-medium text-white truncate">
                     {playlist.title}
                   </span>
-                  <div className="relative">
+                  <div className="relative shrink-0">
+                    {/* Native checkbox: accent-color is what tints it (there is no forms plugin) */}
                     <input
                       type="checkbox"
                       checked={isChecked}
                       disabled={isItemLoading}
                       onChange={() => handleToggleVideo(playlist)}
-                      className="w-5 h-5 rounded border-dark-border text-brand focus:ring-brand bg-dark-input cursor-pointer"
+                      className="block w-5 h-5 accent-brand cursor-pointer"
                     />
                     {isItemLoading && (
                       <Loader2 className="absolute inset-0 w-5 h-5 text-brand animate-spin bg-dark-surface" />
@@ -163,16 +164,16 @@ export const SaveToPlaylistModal = ({ isOpen, onClose, videoId }) => {
               <button
                 type="button"
                 onClick={() => setShowCreate(false)}
-                className="px-3 py-1.5 text-xs text-gray-300 hover:text-white"
+                className="px-4 py-2 text-sm font-medium text-gray-300 hover:text-white rounded-full hover:bg-dark-hover transition-colors"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={isCreating || !title.trim()}
-                className="btn-primary py-1.5 px-4 text-xs"
+                className="btn-primary px-5"
               >
-                {isCreating ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : 'Create'}
+                {isCreating ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Create'}
               </button>
             </div>
           </form>

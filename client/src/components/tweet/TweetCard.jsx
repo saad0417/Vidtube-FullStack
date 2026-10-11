@@ -85,8 +85,8 @@ export const TweetCard = ({ tweet, onTweetDeleted, onTweetUpdated }) => {
   };
 
   return (
-    <div className="p-5 rounded-2xl bg-dark-card border border-dark-border/60 hover:border-dark-border transition-colors">
-      <div className="flex gap-3.5 items-start">
+    <div className="p-4 sm:p-5 rounded-2xl bg-dark-card border border-dark-border/60 hover:border-dark-border transition-colors">
+      <div className="flex gap-3 sm:gap-3.5 items-start">
         {/* Author Avatar */}
         <Link to={`/c/${author.username || ''}`} className="shrink-0">
           <img
@@ -99,36 +99,35 @@ export const TweetCard = ({ tweet, onTweetDeleted, onTweetUpdated }) => {
         {/* Content Area */}
         <div className="flex-1 min-w-0">
           {/* Header */}
-          <div className="flex items-center justify-between gap-2 mb-1.5">
-            <div className="flex items-center gap-2 truncate">
+          <div className="flex items-start justify-between gap-2 mb-1.5">
+            {/* Name over handle on phones, so the name is never squeezed out */}
+            <div className="min-w-0 flex flex-col sm:flex-row sm:items-center gap-x-2">
               <Link
                 to={`/c/${author.username || ''}`}
                 className="text-sm font-semibold text-white hover:underline truncate"
               >
                 {author.fullName || author.username || 'Creator'}
               </Link>
-              <span className="text-xs text-gray-400">
-                @{author.username || 'user'}
-              </span>
-              <span className="text-xs text-gray-500">•</span>
-              <span className="text-xs text-gray-400">
-                {timeAgo(tweet.createdAt)}
-              </span>
+              <div className="flex items-center gap-2 min-w-0 text-xs text-gray-400">
+                <span className="hidden min-[360px]:block truncate">@{author.username || 'user'}</span>
+                <span className="hidden min-[360px]:block text-gray-500">•</span>
+                <span className="shrink-0 whitespace-nowrap">{timeAgo(tweet.createdAt)}</span>
+              </div>
             </div>
 
             {/* Author Controls */}
             {isAuthor && !isEditing && (
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-1 shrink-0 -mt-1 -mr-1.5">
                 <button
                   onClick={() => setIsEditing(true)}
-                  className="p-1.5 text-gray-400 hover:text-white rounded-lg hover:bg-dark-hover transition-colors"
+                  className="p-2 sm:p-1.5 text-gray-400 hover:text-white rounded-lg hover:bg-dark-hover transition-colors"
                   title="Edit post"
                 >
                   <Edit3 className="w-3.5 h-3.5" />
                 </button>
                 <button
                   onClick={() => setShowDeleteModal(true)}
-                  className="p-1.5 text-gray-400 hover:text-red-400 rounded-lg hover:bg-dark-hover transition-colors"
+                  className="p-2 sm:p-1.5 text-gray-400 hover:text-danger rounded-lg hover:bg-dark-hover transition-colors"
                   title="Delete post"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
@@ -173,11 +172,11 @@ export const TweetCard = ({ tweet, onTweetDeleted, onTweetUpdated }) => {
           )}
 
           {/* Like Action */}
-          <div className="flex items-center gap-4 mt-3">
+          <div className="flex items-center gap-4 mt-3 -ml-2.5">
             <button
               onClick={handleToggleLike}
               disabled={isLiking}
-              className={`flex items-center gap-1.5 text-xs font-medium py-1 px-2.5 rounded-full transition-colors active:scale-95 ${
+              className={`flex items-center gap-1.5 text-xs font-medium py-1.5 px-2.5 rounded-full transition-colors active:scale-95 ${
                 isLiked
                   ? 'bg-brand/15 text-brand font-semibold'
                   : 'text-gray-400 hover:text-white hover:bg-dark-hover'

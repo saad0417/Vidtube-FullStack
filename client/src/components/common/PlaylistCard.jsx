@@ -32,7 +32,8 @@ export const PlaylistCard = ({ playlist, onEdit, onDelete }) => {
         <div className="overlay-chip absolute inset-y-0 right-0 w-[38%] flex flex-col items-center justify-center gap-1">
           <ListVideo className="w-5 h-5" />
           <span className="text-sm font-semibold">{videos.length}</span>
-          <span className="text-[10px] uppercase tracking-wider text-gray-300">
+          {/* The chip stays dark in both themes, so dim its white rather than use a themed gray */}
+          <span className="text-[10px] uppercase tracking-wider opacity-75">
             {videos.length === 1 ? 'video' : 'videos'}
           </span>
         </div>
@@ -62,7 +63,7 @@ export const PlaylistCard = ({ playlist, onEdit, onDelete }) => {
           <div className="relative shrink-0">
             <button
               onClick={() => setMenuOpen((prev) => !prev)}
-              className="p-1.5 text-gray-400 hover:text-white hover:bg-dark-hover rounded-full transition-colors"
+              className="p-2 -mr-1.5 text-gray-400 hover:text-white hover:bg-dark-hover rounded-full transition-colors"
               aria-label="Playlist options"
             >
               <MoreVertical className="w-4 h-4" />
@@ -90,7 +91,7 @@ export const PlaylistCard = ({ playlist, onEdit, onDelete }) => {
                         setMenuOpen(false);
                         onDelete(playlist);
                       }}
-                      className="w-full flex items-center gap-2.5 px-4 py-2 text-sm text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-colors"
+                      className="w-full flex items-center gap-2.5 px-4 py-2 text-sm text-danger hover:text-danger-hover hover:bg-red-500/10 transition-colors"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                       <span>Delete</span>

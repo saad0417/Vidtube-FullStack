@@ -122,11 +122,13 @@ export const PlaylistDetailPage = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-      <div className="flex flex-col lg:flex-row gap-8">
+      {/* Side by side only from xl: below that the list column gets too narrow,
+          so the summary sits on top as a horizontal card instead. */}
+      <div className="flex flex-col xl:flex-row gap-8">
         {/* Sticky playlist summary */}
-        <aside className="w-full lg:w-[340px] shrink-0">
-          <div className="lg:sticky lg:top-[73px] rounded-2xl overflow-hidden bg-gradient-to-b from-dark-surface to-dark-card border border-dark-border/60">
-            <div className="relative aspect-video">
+        <aside className="w-full xl:w-[340px] shrink-0">
+          <div className="xl:sticky xl:top-[73px] flex flex-col sm:flex-row xl:flex-col rounded-2xl overflow-hidden bg-gradient-to-b from-dark-surface to-dark-card border border-dark-border/60">
+            <div className="relative aspect-video shrink-0 sm:w-72 md:w-80 xl:w-full">
               <img
                 src={videos[0]?.thumbnail || DEFAULT_THUMBNAIL}
                 alt={playlist.title}
@@ -135,12 +137,13 @@ export const PlaylistDetailPage = () => {
                   e.currentTarget.src = DEFAULT_THUMBNAIL;
                 }}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
+              {/* `black` is white in the light theme, where this fade only washed the cover out */}
+              <div className="absolute inset-0 hidden dark:block bg-gradient-to-t from-black/80 to-transparent" />
             </div>
 
-            <div className="p-5 flex flex-col gap-4">
+            <div className="p-5 flex flex-col gap-4 flex-1 min-w-0">
               <div>
-                <h1 className="text-2xl font-display font-bold text-white leading-tight">{playlist.title}</h1>
+                <h1 className="text-2xl font-display font-bold text-white leading-tight break-words">{playlist.title}</h1>
                 <p className="text-xs text-gray-400 mt-2">
                   {videos.length} {videos.length === 1 ? 'video' : 'videos'} · Updated{' '}
                   {formatDate(playlist.updatedAt)}
@@ -150,12 +153,12 @@ export const PlaylistDetailPage = () => {
               {owner && (
                 <Link
                   to={`/c/${owner.username}`}
-                  className="flex items-center gap-2.5 text-sm text-gray-300 hover:text-white transition-colors w-fit"
+                  className="flex items-center gap-2.5 text-sm text-gray-300 hover:text-white transition-colors w-fit max-w-full"
                 >
                   <img
                     src={owner.avatar || DEFAULT_AVATAR}
                     alt={owner.fullName}
-                    className="w-8 h-8 rounded-full object-cover border border-dark-border"
+                    className="w-8 h-8 shrink-0 rounded-full object-cover border border-dark-border"
                     onError={(e) => {
                       e.currentTarget.src = DEFAULT_AVATAR;
                     }}
@@ -165,14 +168,14 @@ export const PlaylistDetailPage = () => {
               )}
 
               {playlist.description && (
-                <p className="text-sm text-gray-400 leading-relaxed whitespace-pre-wrap">
+                <p className="text-sm text-gray-400 leading-relaxed whitespace-pre-wrap break-words">
                   {playlist.description}
                 </p>
               )}
 
-              <div className="flex flex-wrap items-center gap-2.5 pt-1">
+              <div className="grid grid-cols-2 gap-2.5 pt-1">
                 {videos.length > 0 && (
-                  <Link to={`/watch/${videos[0]._id}`} className="btn-primary text-sm">
+                  <Link to={`/watch/${videos[0]._id}`} className="btn-primary text-sm col-span-2">
                     <Play className="w-4 h-4 fill-current" />
                     <span>Play all</span>
                   </Link>
@@ -195,7 +198,7 @@ export const PlaylistDetailPage = () => {
                     </button>
                     <button
                       onClick={() => setDeleteOpen(true)}
-                      className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium text-red-400 hover:text-red-300 hover:bg-red-500/10 border border-red-500/30 transition-colors"
+                      className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-full text-sm font-medium text-danger hover:text-danger-hover hover:bg-red-500/10 border border-red-500/30 transition-colors"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                       <span>Delete</span>
@@ -223,7 +226,7 @@ export const PlaylistDetailPage = () => {
             <div className="space-y-6">
               {videos.map((video, index) => (
                 <div key={video._id} className="flex gap-3 items-start">
-                  <span className="hidden sm:block w-6 shrink-0 text-sm text-gray-500 font-medium pt-16 text-right">
+                  <span className="hidden sm:block self-center w-6 shrink-0 text-sm text-gray-500 font-medium text-right">
                     {index + 1}
                   </span>
                   <div className="flex-1 min-w-0">
@@ -234,7 +237,7 @@ export const PlaylistDetailPage = () => {
                           <button
                             onClick={() => handleRemoveVideo(video._id)}
                             disabled={removingId === video._id}
-                            className="p-2 text-gray-400 hover:text-red-400 hover:bg-red-500/10 rounded-full transition-colors"
+                            className="p-2 text-gray-400 hover:text-danger hover:bg-red-500/10 rounded-full transition-colors"
                             title="Remove from playlist"
                           >
                             {removingId === video._id ? (

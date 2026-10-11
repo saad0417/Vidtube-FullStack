@@ -70,7 +70,7 @@ export const EditVideoModal = ({ isOpen, onClose, video, onUpdateSuccess }) => {
           <label className="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2">
             Thumbnail
           </label>
-          <div className="flex items-center gap-4">
+          <div className="flex flex-col xs:flex-row xs:items-center gap-3 xs:gap-4">
             <div
               onClick={() => thumbnailInputRef.current?.click()}
               className="w-36 aspect-video rounded-xl overflow-hidden bg-dark-card border border-dark-border cursor-pointer relative group shrink-0"

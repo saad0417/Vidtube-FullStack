@@ -38,14 +38,14 @@ export const Sidebar = () => {
   }, [isAuthenticated, user]);
 
   const navLinkClass = ({ isActive }) =>
-    `flex items-center gap-4 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${
+    `flex items-center gap-4 px-3 py-2.5 rounded-xl text-sm font-medium whitespace-nowrap transition-colors [&>svg]:shrink-0 ${
       isActive
         ? 'bg-dark-card text-white font-semibold'
         : 'text-gray-300 hover:text-white hover:bg-dark-hover'
     }`;
 
   const compactNavLinkClass = ({ isActive }) =>
-    `flex flex-col items-center justify-center gap-1.5 py-3 px-1 rounded-xl text-[10px] font-medium transition-colors ${
+    `w-full flex flex-col items-center justify-center gap-1.5 py-3 px-1 rounded-xl text-[10px] font-medium transition-colors ${
       isActive
         ? 'text-brand font-semibold'
         : 'text-gray-400 hover:text-white hover:bg-dark-hover'
@@ -146,7 +146,7 @@ export const Sidebar = () => {
                   <img
                     src={channel.avatar || DEFAULT_AVATAR}
                     alt={channel.fullName}
-                    className="w-6 h-6 rounded-full object-cover"
+                    className="w-6 h-6 shrink-0 rounded-full object-cover"
                   />
                   <span className="truncate">{channel.fullName || channel.username}</span>
                 </Link>
@@ -242,7 +242,7 @@ export const Sidebar = () => {
       <aside
         className={`${
           overlayMode ? 'hidden' : 'hidden lg:block'
-        } sticky top-[61px] h-[calc(100dvh-61px)] overflow-y-auto overscroll-contain shrink-0 bg-dark-base border-r border-dark-border/60 transition-all duration-200 z-30 ${
+        } sticky top-[61px] h-[calc(100dvh-61px)] overflow-y-auto overflow-x-hidden overscroll-contain shrink-0 bg-dark-base border-r border-dark-border/60 transition-all duration-200 z-30 ${
           isExpanded ? 'w-60' : 'w-[72px]'
         }`}
       >

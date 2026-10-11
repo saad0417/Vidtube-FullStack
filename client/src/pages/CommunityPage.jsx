@@ -70,8 +70,8 @@ export const CommunityPage = () => {
       {loading ? (
         <div className="space-y-4">
           {[1, 2, 3].map((n) => (
-            <div key={n} className="p-5 rounded-2xl bg-dark-card border border-dark-border/60">
-              <div className="flex gap-3.5">
+            <div key={n} className="p-4 sm:p-5 rounded-2xl bg-dark-card border border-dark-border/60">
+              <div className="flex gap-3 sm:gap-3.5">
                 <div className="w-10 h-10 rounded-full bg-dark-hover skeleton shrink-0" />
                 <div className="flex-1 space-y-2.5 pt-1">
                   <div className="h-3 w-1/3 rounded bg-dark-hover skeleton" />

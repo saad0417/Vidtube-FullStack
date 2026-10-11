@@ -16,9 +16,10 @@ export const VideoListItem = ({ video, showDescription = true, action = null }) 
 
   return (
     <div className="flex flex-col sm:flex-row gap-4 group">
+      {/* Sized to the row, not the viewport, so it also fits the playlist page's narrower column */}
       <Link
         to={`/watch/${video._id}`}
-        className="relative block w-full sm:w-64 md:w-80 shrink-0 aspect-video rounded-xl overflow-hidden bg-dark-card border border-dark-border/40"
+        className="relative block w-full sm:w-2/5 sm:max-w-80 shrink-0 aspect-video rounded-xl overflow-hidden bg-dark-card border border-dark-border/40"
       >
         <img
           src={thumbError ? DEFAULT_THUMBNAIL : video.thumbnail || DEFAULT_THUMBNAIL}
@@ -54,12 +55,12 @@ export const VideoListItem = ({ video, showDescription = true, action = null }) 
           {owner.username ? (
             <Link
               to={`/c/${owner.username}`}
-              className="inline-flex items-center gap-2 mt-3 text-xs text-gray-400 hover:text-white transition-colors"
+              className="inline-flex items-center gap-2 mt-3 max-w-full text-xs text-gray-400 hover:text-white transition-colors"
             >
               <img
                 src={owner.avatar}
                 alt={owner.fullName}
-                className="w-6 h-6 rounded-full object-cover border border-dark-border"
+                className="w-6 h-6 shrink-0 rounded-full object-cover border border-dark-border"
                 onError={(e) => {
                   e.currentTarget.src = DEFAULT_AVATAR;
                 }}
