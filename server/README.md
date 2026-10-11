@@ -74,7 +74,7 @@ curl http://localhost:8000/api/v1/healthCheck
 | `CLOUDINARY_API_SECRET` | Cloudinary API secret | |
 | `TRUST_PROXY` | *Optional.* Number of proxies in front of the API, so rate limiting sees the real client IP. Defaults to `3` on Render (detected through Render's `RENDER` variable) and `0` everywhere else. | `3` |
 
-`CORS_ORIGIN` can hold several origins separated by commas. `https://vidtubeoffical.vercel.app` and the usual localhost dev ports are always allowed. Browsers on any other origin are blocked.
+`CORS_ORIGIN` can hold several origins separated by commas. `https://vidtubeofficial.vercel.app` and the usual localhost dev ports are always allowed. Browsers on any other origin are blocked.
 
 `.env` is gitignored. Use `.env.example` as the template.
 

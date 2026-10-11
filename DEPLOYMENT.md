@@ -10,7 +10,7 @@ Vidtube-FullStack/
 
 | Part | Host | Live URL |
 | --- | --- | --- |
-| Frontend | Vercel | https://vidtubeoffical.vercel.app |
+| Frontend | Vercel | https://vidtubeofficial.vercel.app |
 | API | Render | https://vidtube-fullstack.onrender.com |
 | Database | MongoDB Atlas (M0 free cluster) | — |
 | Media | Cloudinary (free plan) | — |
@@ -70,7 +70,7 @@ Add these **environment variables**:
 | Key | Value |
 | --- | --- |
 | `MONGODB_URI` | Connection string from step 1 |
-| `CORS_ORIGIN` | Your Vercel URL, e.g. `https://vidtubeoffical.vercel.app` (no trailing slash) |
+| `CORS_ORIGIN` | Your Vercel URL, e.g. `https://vidtubeofficial.vercel.app` (no trailing slash) |
 | `ACCESS_TOKEN_SECRET` | A fresh random string |
 | `ACCESS_TOKEN_EXPIRY` | `1d` |
 | `REFRESH_TOKEN_SECRET` | A different fresh random string |
@@ -90,7 +90,7 @@ You don't need to set `PORT`. Render sets it, and the server reads `process.env.
 
 You don't need to set `TRUST_PROXY` either. The server detects Render through its `RENDER` variable and trusts 3 proxy hops (Cloudflare, Render's load balancer and an internal proxy), so rate limiting sees each visitor's real IP. Set `TRUST_PROXY` only if you deploy to a different host.
 
-**CORS is strict:** only the origins in `CORS_ORIGIN` (comma-separated), `https://vidtubeoffical.vercel.app` and localhost are allowed. Vercel *preview* deployments get a different URL on every build, so they are blocked. To test a preview against the live API, add its URL to `CORS_ORIGIN`.
+**CORS is strict:** only the origins in `CORS_ORIGIN` (comma-separated), `https://vidtubeofficial.vercel.app` and localhost are allowed. Vercel *preview* deployments get a different URL on every build, so they are blocked. To test a preview against the live API, add its URL to `CORS_ORIGIN`.
 
 After the deploy finishes, open `https://<your-service>.onrender.com/api/v1/healthCheck`. It should return `"ALL OK!"`.
 

@@ -6,7 +6,7 @@
 
 Built with React, Express, MongoDB and Cloudinary.
 
-[**Live Demo**](https://vidtubeoffical.vercel.app) · [API Health Check](https://vidtube-fullstack.onrender.com/api/v1/healthCheck) · [Deployment Guide](./DEPLOYMENT.md)
+[**Live Demo**](https://vidtubeofficial.vercel.app) · [API Health Check](https://vidtube-fullstack.onrender.com/api/v1/healthCheck) · [Deployment Guide](./DEPLOYMENT.md)
 
 ![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white)
 ![Vite](https://img.shields.io/badge/Vite-8-646CFF?logo=vite&logoColor=white)
@@ -429,7 +429,7 @@ Every neutral colour is a CSS variable in `client/src/index.css`, and `tailwind.
 
 | Part | Platform | URL |
 | --- | --- | --- |
-| Frontend | Vercel | https://vidtubeoffical.vercel.app |
+| Frontend | Vercel | https://vidtubeofficial.vercel.app |
 | API | Render | https://vidtube-fullstack.onrender.com |
 | Database | MongoDB Atlas | — |
 | Media | Cloudinary | — |

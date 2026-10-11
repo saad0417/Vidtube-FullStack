@@ -2,7 +2,7 @@
 
 React single-page app for the VidTube video platform. It talks to the Express + MongoDB API in [`../server`](../server). See the [root README](../README.md) for an overview of the whole project.
 
-**Live:** https://vidtubeoffical.vercel.app
+**Live:** https://vidtubeofficial.vercel.app
 
 Built with React 19, React Router 7, Tailwind CSS 3, Axios and Vite 8.
 
