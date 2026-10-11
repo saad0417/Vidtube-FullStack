@@ -164,8 +164,8 @@ const publishAVideo = asyncHandler(async (req, res) => {
             title,
             description,
             owner,
-            videoFile: video.url,
-            thumbnail: thumbnail.url,
+            videoFile: video.secure_url,
+            thumbnail: thumbnail.secure_url,
             duration: video.duration ? Number(video.duration.toFixed(2)) : 0,
             isPublished: true
         }
@@ -326,7 +326,7 @@ const updateVideo = asyncHandler(async (req, res) => {
 
         const newThumbnail = await uploadOnCloudinary(thumbnailLocalPath, "thumbnails");
 
-        if(!newThumbnail?.url)
+        if(!newThumbnail?.secure_url)
         {
             throw new ApiError(400, "Error while uploading file on cloudinary!")
         }
@@ -337,7 +337,7 @@ const updateVideo = asyncHandler(async (req, res) => {
             await deleteFromCloudinary(oldPublicId)
         }
 
-        updateData.thumbnail = newThumbnail.url
+        updateData.thumbnail = newThumbnail.secure_url
     }
 
     // here we are checking that if user doesn't give anyone of it then and we update this entry is DB then it will be set setted as undefined or empty.

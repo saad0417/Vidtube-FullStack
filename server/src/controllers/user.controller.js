@@ -94,8 +94,8 @@ const registerUser = asyncHandler( async (req, res) => {
     const user = await User.create(
         {
             fullName,
-            avatar: avatar.url,
-            coverImage: coverImage?.url || "", // here coverImage is optional field in DB you we are optionally checking it like if user hasn't uploded coverImage the DB may crash.
+            avatar: avatar.secure_url,
+            coverImage: coverImage?.secure_url || "", // here coverImage is optional field in DB you we are optionally checking it like if user hasn't uploded coverImage the DB may crash.
             email,
             password,
             username: username.toLowerCase()
@@ -421,7 +421,7 @@ const updateAvatar = asyncHandler(async(req, res) => {
 
     const newAvatar = await uploadOnCloudinary(avatarLocalPath, "avatars")
 
-    if(!newAvatar?.url)
+    if(!newAvatar?.secure_url)
     {
         throw new ApiError(400, "Error while uploading avatar on cloudinary!")
     }
@@ -436,7 +436,7 @@ const updateAvatar = asyncHandler(async(req, res) => {
         req.user?._id,
         {
             $set:{
-                avatar: newAvatar.url
+                avatar: newAvatar.secure_url
             }
         },
         {
@@ -477,7 +477,7 @@ const updateCoverImage = asyncHandler(async(req, res) => {
 
     const newCoverImage = await uploadOnCloudinary(coverImageLocalPath, "coverImages")
 
-    if(!newCoverImage?.url)
+    if(!newCoverImage?.secure_url)
     {
         throw new ApiError(400, "Error while uploading cover image on cloudinary!")
     }
@@ -492,7 +492,7 @@ const updateCoverImage = asyncHandler(async(req, res) => {
         req.user?._id,
         {
             $set:{
-                coverImage: newCoverImage.url
+                coverImage: newCoverImage.secure_url
             }
         },
         {
